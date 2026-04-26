@@ -45,9 +45,6 @@ export function ActiveProjects({ activeTab, statusFilter }: Props) {
           <h2 className="text-xl font-bold tracking-tight text-foreground">진행 중인 프로젝트</h2>
           <p className="text-sm font-medium text-muted-foreground">{list.length}개의 활성 작업</p>
         </div>
-        <button className="text-xs font-bold text-muted-foreground hover:text-foreground transition-colors">
-          전체 보기
-        </button>
       </div>
 
       <div className="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">

@@ -32,7 +32,7 @@ export function HeroSection() {
     newThumbnails[index] = activeProject;
     setActiveProject(clickedProject);
     setThumbnails(newThumbnails);
-    setSegmentTab("tasks"); // reset tab on change
+    setSegmentTab("tasks");
   };
 
   const draftImages = [
@@ -53,12 +53,8 @@ export function HeroSection() {
           <h2 className="text-lg font-bold tracking-tight text-foreground">최근 업데이트</h2>
           <p className="text-sm font-medium text-muted-foreground">최근 업데이트된 프로젝트 내역입니다.</p>
         </div>
-        <button className="text-xs font-bold text-muted-foreground hover:text-foreground transition-colors">
-          전체 보기
-        </button>
       </div>
 
-      {/* Featured card */}
       <motion.article 
         layout 
         className="group relative overflow-hidden rounded-[32px] bg-surface shadow-soft-md border border-hairline/40"
@@ -89,7 +85,6 @@ export function HeroSection() {
               </span>
             </div>
 
-            {/* Image Stack Indicator (Drafts) */}
             <div className="absolute right-6 bottom-6 z-20 group/drafts flex items-center bg-background/60 backdrop-blur-md rounded-full px-2 py-1.5 border border-white/10 shadow-lg cursor-pointer hover:bg-background/80 transition-colors">
               <div className="flex relative w-8 h-8 group-hover/drafts:w-[84px] transition-all duration-300 ease-out">
                 {draftImages.map((src, i) => (
@@ -115,15 +110,17 @@ export function HeroSection() {
                 {activeProject.title}
               </motion.h3>
 
-              {/* Progress Bar directly under title */}
-              <motion.div layout className="mb-4">
-                <div className="flex items-center justify-between text-[11px] font-bold text-muted-foreground mb-1.5">
-                  <span>진행률</span>
-                  <span className="text-foreground">{activeProject.progress}%</span>
+              {/* Progress Bar restored under title with massive typography */}
+              <motion.div layout className="mb-5">
+                <div className="flex items-baseline gap-2 mb-2">
+                  <span className="text-[12px] font-bold text-muted-foreground uppercase tracking-wider">진행률</span>
+                  <span className="text-5xl font-black tabular-nums tracking-tighter bg-clip-text text-transparent bg-gradient-to-br from-foreground to-muted-foreground leading-none">
+                    {activeProject.progress}%
+                  </span>
                 </div>
-                <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+                <div className="h-[2px] w-full overflow-hidden rounded-full bg-muted/60">
                   <div
-                    className="h-full rounded-full bg-foreground transition-all duration-500"
+                    className="h-full rounded-full bg-foreground transition-all duration-700 ease-out"
                     style={{ width: `${activeProject.progress}%` }}
                   />
                 </div>
@@ -184,10 +181,10 @@ export function HeroSection() {
                       transition={{ duration: 0.2 }}
                       className="bg-white/40 dark:bg-black/40 backdrop-blur-md border border-border/50 rounded-xl p-3 mb-2 flex items-center gap-3 shadow-sm hover:shadow-md transition-shadow"
                     >
+                      <span className="text-[11.5px] font-bold text-muted-foreground tabular-nums shrink-0 w-[42px]">{item.date}</span>
                       <div className="flex-1 min-w-0">
                         <div className="text-[13px] font-bold text-foreground truncate">{item.title}</div>
                       </div>
-                      <span className="text-[11px] font-bold text-muted-foreground tabular-nums shrink-0">{item.date}</span>
                       <span className={`shrink-0 inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${
                         item.status === "issue" ? "bg-red-500/10 text-red-500 border-red-500/20" : item.status === "done" ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" : item.status === "ongoing" ? "bg-indigo-400/10 text-indigo-400 border-indigo-400/20" : "bg-blue-500/10 text-blue-500 border-blue-500/20"
                       }`}>
@@ -226,8 +223,9 @@ export function HeroSection() {
                 layoutId={`project-img-${p.id}`}
                 key={p.id}
                 onClick={() => handleThumbnailClick(p, index)}
-                className="relative shrink-0 snap-start overflow-hidden rounded-[24px] bg-surface shadow-soft w-[280px] aspect-video cursor-pointer hover:-translate-y-1.5 hover:shadow-2xl hover:z-50 hover:ring-2 hover:ring-ring/50 transition-all duration-400"
+                className="relative shrink-0 snap-start overflow-hidden rounded-[24px] bg-surface w-[280px] aspect-video cursor-pointer hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(255,255,255,0.2)] dark:hover:shadow-[0_12px_30px_rgba(255,255,255,0.08)] hover:z-50 transition-all duration-400"
               >
+                <div className="absolute inset-0 z-20 ring-1 ring-white/20 rounded-[24px] pointer-events-none shadow-[inset_0_0_20px_rgba(255,255,255,0.05)]" />
                 <img
                   src={p.cover}
                   alt={p.title}

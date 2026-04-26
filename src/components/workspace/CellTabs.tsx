@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { type CellType } from "@/lib/dashboard-data";
 
 export type TabValue = "all" | CellType;
@@ -9,13 +10,6 @@ const tabs: { value: TabValue; label: string }[] = [
   { value: "edit", label: "편집" },
 ];
 
-const activeClass: Record<TabValue, string> = {
-  all: "bg-foreground text-background",
-  video: "bg-cell-video text-white",
-  ux: "bg-cell-ux text-white",
-  edit: "bg-cell-edit text-white",
-};
-
 interface Props {
   value: TabValue;
   onChange: (v: TabValue) => void;
@@ -23,7 +17,7 @@ interface Props {
 
 export function CellTabs({ value, onChange }: Props) {
   return (
-    <div className="flex items-center gap-1.5 rounded-full border border-hairline bg-surface p-1 shadow-soft w-fit">
+    <div className="flex items-center gap-6 border-b border-hairline/60 w-fit pb-1">
       {tabs.map((t) => {
         const isActive = t.value === value;
         return (
@@ -31,14 +25,18 @@ export function CellTabs({ value, onChange }: Props) {
             key={t.value}
             type="button"
             onClick={() => onChange(t.value)}
-            className={[
-              "rounded-full px-4 py-1.5 text-sm font-medium transition-all",
-              isActive
-                ? `${activeClass[t.value]} shadow-soft`
-                : "text-muted-foreground hover:text-foreground",
-            ].join(" ")}
+            className={`relative px-1 py-2 text-[15px] transition-colors ${
+              isActive ? "font-black text-foreground" : "font-semibold text-muted-foreground hover:text-foreground"
+            }`}
           >
             {t.label}
+            {isActive && (
+              <motion.div
+                layoutId="cellTabUnderline"
+                className="absolute bottom-[-5px] left-0 right-0 h-[3px] bg-foreground rounded-t-full"
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              />
+            )}
           </button>
         );
       })}
