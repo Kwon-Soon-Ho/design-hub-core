@@ -1,5 +1,5 @@
 import { ChevronRight, Flag } from "lucide-react";
-import { activeProjects, cellLabel, type CellType, type Priority } from "@/lib/dashboard-data";
+import { activeProjects, cellLabel, type CellType, type Priority, statusLabel } from "@/lib/dashboard-data";
 import { type TabValue } from "./CellTabs";
 
 const cellChipClass: Record<CellType, string> = {
@@ -15,7 +15,7 @@ const cellBarClass: Record<CellType, string> = {
 };
 
 const priorityClass: Record<Priority, string> = {
-  high: "text-status-blocked",
+  high: "text-red-500",
   mid: "text-cell-edit",
   low: "text-muted-foreground",
 };
@@ -34,62 +34,62 @@ export function ActiveProjects({ activeTab }: Props) {
   const list = activeProjects.filter((p) => activeTab === "all" || p.cell === activeTab);
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-5">
       <div className="flex items-end justify-between">
         <div>
-          <h2 className="text-lg font-semibold tracking-tight text-foreground">진행 중인 프로젝트</h2>
-          <p className="text-sm text-muted-foreground">{list.length}개의 활성 작업</p>
+          <h2 className="text-xl font-bold tracking-tight text-foreground">진행 중인 프로젝트</h2>
+          <p className="text-sm font-medium text-muted-foreground">{list.length}개의 활성 작업</p>
         </div>
-        <button className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors">
+        <button className="text-xs font-bold text-muted-foreground hover:text-foreground transition-colors">
           전체 보기
         </button>
       </div>
 
-      <div className="grid gap-3 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
         {list.map((p) => (
           <article
             key={p.id}
-            className="group relative overflow-hidden rounded-2xl bg-surface shadow-soft border border-hairline/60 hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
+            className="group relative overflow-hidden rounded-3xl bg-surface shadow-soft border border-hairline/40 hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300"
           >
             {/* cell color stripe */}
-            <span className={`absolute left-0 top-0 h-full w-[3px] ${cellBarClass[p.cell]}`} />
+            <span className={`absolute left-0 top-0 h-full w-[4px] ${cellBarClass[p.cell]}`} />
 
-            <div className="p-4 pl-5">
+            <div className="p-5 pl-6">
               <div className="flex items-center gap-2 flex-wrap">
                 <span
-                  className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10.5px] font-semibold ${cellChipClass[p.cell]}`}
+                  className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-bold ${cellChipClass[p.cell]}`}
                 >
                   {cellLabel[p.cell]}
                 </span>
                 <span
-                  className={`inline-flex items-center gap-1 text-[11px] font-medium rounded-full bg-muted/60 px-2 py-0.5 ${priorityClass[p.priority]}`}
+                  className={`inline-flex items-center gap-1.5 text-[11px] font-bold rounded-full bg-muted/60 px-2.5 py-1 ${priorityClass[p.priority]}`}
                 >
                   <Flag className="h-3 w-3" />
                   우선순위 {priorityLabel[p.priority]}
                 </span>
-                <span className="ml-auto inline-flex items-center gap-1.5 text-[11px] font-medium text-foreground rounded-full border border-hairline/60 px-2 py-0.5">
+                <span className="ml-auto inline-flex items-center gap-1.5 text-[11px] font-bold text-foreground rounded-full border border-hairline/60 px-3 py-1 shadow-sm">
                   <span
-                    className={`h-1.5 w-1.5 rounded-full ${
-                      p.status === "blocked" ? "bg-status-blocked" : "bg-status-progress"
+                    className={`h-2 w-2 rounded-full ${
+                      p.status === "issue" ? "bg-red-500" : p.status === "ongoing" ? "bg-indigo-400" : p.status === "done" ? "bg-emerald-500" : "bg-blue-500"
                     }`}
                   />
-                  D-{p.dDay}
+                  {statusLabel[p.status]} · D-{p.dDay}
                 </span>
               </div>
 
-              <h3 className="mt-3 text-[14.5px] font-semibold leading-snug tracking-tight text-foreground line-clamp-2 break-keep">
+              <h3 className="mt-4 text-[16px] font-bold tracking-tight leading-snug text-foreground line-clamp-2 break-keep">
                 {p.title}
               </h3>
-              <p className="mt-1 text-[12.5px] text-muted-foreground line-clamp-2 break-keep">
+              <p className="mt-1.5 text-[13.5px] font-medium text-muted-foreground/90 leading-relaxed line-clamp-2 break-keep">
                 {p.description}
               </p>
 
-              <div className="mt-4">
-                <div className="mb-1.5 flex items-center justify-between text-[11px] text-muted-foreground">
+              <div className="mt-5">
+                <div className="mb-2 flex items-center justify-between text-[12px] font-bold text-muted-foreground">
                   <span>진행률</span>
-                  <span className="font-medium text-foreground tabular-nums">{p.progress}%</span>
+                  <span className="font-bold text-foreground tabular-nums">{p.progress}%</span>
                 </div>
-                <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+                <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
                   <div
                     className={`h-full rounded-full ${cellBarClass[p.cell]}`}
                     style={{ width: `${p.progress}%` }}
@@ -97,14 +97,14 @@ export function ActiveProjects({ activeTab }: Props) {
                 </div>
               </div>
 
-              <div className="mt-4 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="grid h-6 w-6 place-items-center rounded-full bg-muted text-[10px] font-semibold text-foreground">
+              <div className="mt-5 flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <span className="grid h-7 w-7 place-items-center rounded-full bg-muted text-[11px] font-bold text-foreground">
                     {p.owner.slice(0, 1)}
                   </span>
-                  <span className="text-[12px] text-muted-foreground">{p.owner} · {p.updatedAt}</span>
+                  <span className="text-[12.5px] font-bold text-muted-foreground">{p.owner} · {p.updatedAt}</span>
                 </div>
-                <ChevronRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                <ChevronRight className="h-4.5 w-4.5 text-muted-foreground transition-transform group-hover:translate-x-1" />
               </div>
             </div>
           </article>
