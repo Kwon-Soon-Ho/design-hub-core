@@ -6,6 +6,7 @@ import { HeroSection } from "@/components/workspace/HeroSection";
 import { CellTabs, type TabValue } from "@/components/workspace/CellTabs";
 import { SummaryCards } from "@/components/workspace/SummaryCards";
 import { ActiveProjects } from "@/components/workspace/ActiveProjects";
+import { type Status } from "@/lib/dashboard-data";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -23,6 +24,7 @@ export const Route = createFileRoute("/")({
 
 function DashboardPage() {
   const [tab, setTab] = useState<TabValue>("all");
+  const [statusFilter, setStatusFilter] = useState<Status | "all">("all");
 
   return (
     <div className="flex min-h-screen w-full bg-background">
@@ -47,10 +49,10 @@ function DashboardPage() {
               <CellTabs value={tab} onChange={setTab} />
             </div>
 
-            <SummaryCards activeTab={tab} />
+            <SummaryCards activeTab={tab} statusFilter={statusFilter} onStatusChange={setStatusFilter} />
           </section>
 
-          <ActiveProjects activeTab={tab} />
+          <ActiveProjects activeTab={tab} statusFilter={statusFilter} />
         </div>
       </main>
     </div>

@@ -1,5 +1,5 @@
 import { ChevronRight, Flag } from "lucide-react";
-import { activeProjects, cellLabel, type CellType, type Priority, statusLabel } from "@/lib/dashboard-data";
+import { activeProjects, cellLabel, type CellType, type Priority, statusLabel, Status } from "@/lib/dashboard-data";
 import { type TabValue } from "./CellTabs";
 
 const cellChipClass: Record<CellType, string> = {
@@ -28,10 +28,15 @@ const priorityLabel: Record<Priority, string> = {
 
 interface Props {
   activeTab: TabValue;
+  statusFilter: Status | "all";
 }
 
-export function ActiveProjects({ activeTab }: Props) {
-  const list = activeProjects.filter((p) => activeTab === "all" || p.cell === activeTab);
+export function ActiveProjects({ activeTab, statusFilter }: Props) {
+  const list = activeProjects.filter((p) => {
+    const tabMatch = activeTab === "all" || p.cell === activeTab;
+    const statusMatch = statusFilter === "all" || p.status === statusFilter;
+    return tabMatch && statusMatch;
+  });
 
   return (
     <section className="space-y-5">
@@ -109,6 +114,11 @@ export function ActiveProjects({ activeTab }: Props) {
             </div>
           </article>
         ))}
+        {list.length === 0 && (
+          <div className="col-span-full py-12 text-center border border-dashed border-hairline rounded-3xl">
+            <p className="text-muted-foreground font-medium">선택한 상태에 해당하는 프로젝트가 없습니다.</p>
+          </div>
+        )}
       </div>
     </section>
   );
