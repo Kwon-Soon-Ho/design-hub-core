@@ -13,6 +13,7 @@ export function HeroSection() {
   const [activeProject, setActiveProject] = useState<Project>(initialFeatured);
   const [thumbnails, setThumbnails] = useState<Project[]>(initialThumbnails);
   const [activeDraftCover, setActiveDraftCover] = useState(initialFeatured.cover);
+  const [segmentTab, setSegmentTab] = useState<"tasks" | "issues">("tasks");
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -31,6 +32,7 @@ export function HeroSection() {
     newThumbnails[index] = activeProject;
     setActiveProject(clickedProject);
     setThumbnails(newThumbnails);
+    setSegmentTab("tasks"); // reset tab on change
   };
 
   const draftImages = [
@@ -40,6 +42,9 @@ export function HeroSection() {
   ];
   
   const leftOffsets = ["left-0 group-hover/drafts:left-0", "left-0 group-hover/drafts:left-[26px]", "left-0 group-hover/drafts:left-[52px]"];
+
+  const listItems = segmentTab === "tasks" ? activeProject.tasks : activeProject.issues;
+  const sortedItems = listItems ? [...listItems].sort((a, b) => a.date.localeCompare(b.date)) : [];
 
   return (
     <section className="space-y-6">
@@ -59,7 +64,7 @@ export function HeroSection() {
         className="group relative overflow-hidden rounded-[32px] bg-surface shadow-soft-md border border-hairline/40"
       >
         <div className="grid md:grid-cols-[1.4fr_1fr]">
-          <motion.div layoutId={`project-img-${activeProject.id}`} className="relative aspect-video bg-neutral-100/80 dark:bg-neutral-900/50 rounded-2xl p-4 flex items-center justify-center overflow-hidden">
+          <motion.div layoutId={`project-img-${activeProject.id}`} className="relative aspect-video md:aspect-auto md:h-full overflow-hidden bg-neutral-100/80 dark:bg-neutral-900/50 rounded-2xl p-4 flex items-center justify-center shadow-inner">
             <AnimatePresence mode="popLayout">
               <motion.img
                 key={`fg-${activeDraftCover}`}
@@ -70,7 +75,7 @@ export function HeroSection() {
                 src={activeDraftCover}
                 alt={activeProject.title}
                 loading="eager"
-                className="relative z-10 w-full h-full object-contain drop-shadow-2xl rounded-lg transition-transform duration-700 group-hover:scale-[1.02]"
+                className="relative z-10 w-full h-full object-contain shadow-xl drop-shadow-lg rounded-xl ring-1 ring-black/5 transition-transform duration-700 group-hover:scale-[1.02]"
               />
             </AnimatePresence>
             
@@ -104,59 +109,102 @@ export function HeroSection() {
             </div>
           </motion.div>
 
-          <div className="flex flex-col justify-between p-7 md:p-8 gap-6 relative z-20 bg-surface">
+          <div className="flex flex-col p-7 md:p-8 gap-5 relative z-20 bg-surface">
             <div>
-              <motion.h3 layout className="text-2xl md:text-[28px] font-bold tracking-tight leading-snug text-foreground line-clamp-3 mb-4">
+              <motion.h3 layout className="text-2xl md:text-[26px] font-bold tracking-tight leading-snug text-foreground line-clamp-2 mb-3">
                 {activeProject.title}
               </motion.h3>
+
+              {/* Progress Bar directly under title */}
+              <motion.div layout className="mb-4">
+                <div className="flex items-center justify-between text-[11px] font-bold text-muted-foreground mb-1.5">
+                  <span>진행률</span>
+                  <span className="text-foreground">{activeProject.progress}%</span>
+                </div>
+                <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+                  <div
+                    className="h-full rounded-full bg-foreground transition-all duration-500"
+                    style={{ width: `${activeProject.progress}%` }}
+                  />
+                </div>
+              </motion.div>
+
+              {/* Metadata row */}
               <motion.div layout className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center rounded-full bg-surface px-3 py-1 text-[12px] font-bold text-foreground border border-hairline/60 shadow-sm">
+                <span className="inline-flex items-center rounded-full bg-surface px-3 py-1 text-[11px] font-bold text-foreground border border-hairline/60 shadow-sm">
                   PM: {activeProject.owner}
                 </span>
-                <span className="inline-flex items-center rounded-full bg-surface px-3 py-1 text-[12px] font-bold text-foreground border border-hairline/60 shadow-sm">
-                  협업부서: 경영기획팀
+                <span className="inline-flex items-center rounded-full bg-surface px-3 py-1 text-[11px] font-bold text-foreground border border-hairline/60 shadow-sm">
+                  협업: 경영기획팀
+                </span>
+                <span className="inline-flex items-center rounded-full bg-surface px-3 py-1 text-[11px] font-bold text-foreground border border-hairline/60 shadow-sm">
+                  담당자: {activeProject.assignees?.map(a => a.name).join(", ") || "배정 전"}
                 </span>
               </motion.div>
             </div>
 
             <motion.div layout className="grid grid-cols-2 gap-3">
-              <div className="bg-surface/50 border border-hairline/40 rounded-xl p-3.5 flex flex-col justify-center shadow-sm backdrop-blur-sm transition-colors hover:bg-surface">
-                <span className="text-[13px] font-bold text-foreground tracking-tight">🗓️ 기간: 2026.04.01 - 2026.12.31</span>
+              <div className="bg-surface/50 border border-hairline/40 rounded-xl p-3 flex flex-col justify-center shadow-sm backdrop-blur-sm transition-colors hover:bg-surface">
+                <span className="text-[12.5px] font-bold text-foreground tracking-tight">🗓️ 기간: 2026.04.01 - 2026.12.31</span>
               </div>
-              <div className="bg-surface/50 border border-hairline/40 rounded-xl p-3.5 flex flex-col justify-center shadow-sm backdrop-blur-sm transition-colors hover:bg-surface">
-                <span className="text-[13px] font-bold text-destructive tracking-tight">⏰ 마감: 2026년 12월 31일 (D-{activeProject.dDay})</span>
+              <div className="bg-surface/50 border border-hairline/40 rounded-xl p-3 flex flex-col justify-center shadow-sm backdrop-blur-sm transition-colors hover:bg-surface">
+                <span className="text-[12.5px] font-bold text-destructive tracking-tight">⏰ 마감: 2026년 12월 31일 (D-{activeProject.dDay})</span>
               </div>
             </motion.div>
 
-            <motion.div layout className="flex-1 min-h-0 flex flex-col bg-background/50 border border-border/40 rounded-[20px] p-5 shadow-sm">
-              <span className="text-[12px] font-bold text-muted-foreground mb-3 block uppercase tracking-wider">업무 내용</span>
+            {/* Segment Tab View */}
+            <motion.div layout className="flex-1 min-h-0 flex flex-col bg-background/50 border border-border/40 rounded-[20px] p-5 pb-16 shadow-sm relative">
+              <div className="flex items-center gap-1 bg-muted/50 p-1 rounded-lg mb-4 w-fit">
+                <button
+                  onClick={() => setSegmentTab("tasks")}
+                  className={`px-4 py-1.5 text-[12px] font-bold rounded-md transition-all ${
+                    segmentTab === "tasks" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  업무 내역
+                </button>
+                <button
+                  onClick={() => setSegmentTab("issues")}
+                  className={`px-4 py-1.5 text-[12px] font-bold rounded-md transition-all ${
+                    segmentTab === "issues" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  이슈 사항
+                </button>
+              </div>
               
-              <div className="overflow-y-auto max-h-[160px] custom-scrollbar pr-2 flex-1 space-y-2">
-                {activeProject.tasks?.map((task) => (
-                  <div key={task.id} className="bg-surface/50 border border-border/50 p-3 rounded-xl flex items-center gap-3 shadow-sm hover:shadow-md transition-shadow">
-                    <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-muted text-[11px] font-bold text-foreground">
-                      {task.worker.slice(0, 1)}
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-[13px] font-bold text-foreground truncate">{task.title}</div>
-                    </div>
-                    <span className={`shrink-0 inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
-                      task.status === "issue" ? "bg-red-500/10 text-red-500 border border-red-500/20" : task.status === "done" ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20" : task.status === "ongoing" ? "bg-indigo-400/10 text-indigo-400 border border-indigo-400/20" : "bg-blue-500/10 text-blue-500 border border-blue-500/20"
-                    }`}>
-                      {statusLabel[task.status] || "진행 중"}
-                    </span>
-                  </div>
-                ))}
-                {(!activeProject.tasks || activeProject.tasks.length === 0) && (
-                   <p className="text-[13.5px] font-medium text-muted-foreground leading-relaxed break-keep">{activeProject.description}</p>
+              <div className="overflow-y-auto max-h-[160px] custom-scrollbar pr-2 flex-1 relative z-10">
+                <AnimatePresence mode="popLayout">
+                  {sortedItems.map((item) => (
+                    <motion.div 
+                      key={item.id}
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                      className="bg-white/40 dark:bg-black/40 backdrop-blur-md border border-border/50 rounded-xl p-3 mb-2 flex items-center gap-3 shadow-sm hover:shadow-md transition-shadow"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <div className="text-[13px] font-bold text-foreground truncate">{item.title}</div>
+                      </div>
+                      <span className="text-[11px] font-bold text-muted-foreground tabular-nums shrink-0">{item.date}</span>
+                      <span className={`shrink-0 inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${
+                        item.status === "issue" ? "bg-red-500/10 text-red-500 border-red-500/20" : item.status === "done" ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" : item.status === "ongoing" ? "bg-indigo-400/10 text-indigo-400 border-indigo-400/20" : "bg-blue-500/10 text-blue-500 border-blue-500/20"
+                      }`}>
+                        {statusLabel[item.status] || "진행 중"}
+                      </span>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+                {sortedItems.length === 0 && (
+                   <p className="text-[13px] text-muted-foreground leading-relaxed py-4 text-center">등록된 항목이 없습니다.</p>
                 )}
               </div>
 
-              <div className="mt-4 flex justify-end shrink-0">
-                <button className="inline-flex items-center gap-1.5 rounded-[12px] bg-foreground px-5 py-2.5 text-[13px] font-bold text-background hover:scale-105 transition-all shadow-md active:scale-95">
-                  프로젝트 상세 보기 <ArrowUpRight className="h-4 w-4" />
-                </button>
-              </div>
+              {/* Floating Button */}
+              <button className="absolute bottom-5 right-5 inline-flex items-center gap-1.5 rounded-[12px] bg-foreground px-5 py-2.5 text-[13px] font-bold text-background hover:scale-105 transition-all shadow-md active:scale-95 z-20">
+                프로젝트 상세 보기 <ArrowUpRight className="h-4 w-4" />
+              </button>
             </motion.div>
           </div>
         </div>

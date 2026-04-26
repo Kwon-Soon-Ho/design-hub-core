@@ -4,9 +4,16 @@ export type Priority = "high" | "mid" | "low";
 
 export interface Task {
   id: string;
-  worker: string;
   title: string;
   status: Status;
+  date: string;
+}
+
+export interface Issue {
+  id: string;
+  title: string;
+  status: Status;
+  date: string;
 }
 
 export interface Project {
@@ -21,7 +28,9 @@ export interface Project {
   owner: string;
   cover: string;
   updatedAt: string;
+  assignees?: { name: string; avatar?: string }[];
   tasks?: Task[];
+  issues?: Issue[];
 }
 
 export const cellLabel: Record<CellType, string> = {
@@ -59,12 +68,20 @@ export const featured: Project = {
   owner: "강미나",
   cover: "https://images.unsplash.com/photo-1600132806370-bf17e65e942f?auto=format&fit=crop&w=1600&q=80",
   updatedAt: "2시간 전 업데이트",
+  assignees: [
+    { name: "강미나" },
+    { name: "권순호" },
+    { name: "이영희" }
+  ],
   tasks: [
-    { id: "t1", worker: "강미나", title: "메인 랜딩페이지 UI 시안", status: "done" },
-    { id: "t2", worker: "김철수", title: "컴포넌트 라이브러리 정비", status: "progress" },
-    { id: "t3", worker: "최수정", title: "반응형 웹 가이드라인 검토", status: "issue" },
-    { id: "t4", worker: "강미나", title: "에셋 패키징 및 핸드오프", status: "ongoing" },
-    { id: "t5", worker: "이영희", title: "QA 및 버그 수정", status: "progress" },
+    { id: "t1", title: "메인 랜딩페이지 UI 시안", status: "done", date: "10.21" },
+    { id: "t2", title: "컴포넌트 라이브러리 정비", status: "progress", date: "10.23" },
+    { id: "t3", title: "에셋 패키징 및 핸드오프", status: "ongoing", date: "10.24" },
+    { id: "t4", title: "QA 및 최종 배포 준비", status: "progress", date: "10.25" },
+  ],
+  issues: [
+    { id: "i1", title: "반응형 웹 가이드라인 검토 지연", status: "issue", date: "10.22" },
+    { id: "i2", title: "폰트 라이선스 확보 지연", status: "issue", date: "10.24" },
   ]
 };
 
