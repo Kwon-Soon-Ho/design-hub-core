@@ -37,8 +37,8 @@ export function HeroSection() {
 
   const draftImages = [
     activeProject.cover,
-    "https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80"
+    "https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1579546929518-9e396f3cc135?auto=format&fit=crop&w=800&q=80"
   ];
   
   const leftOffsets = ["left-0 group-hover/drafts:left-0", "left-0 group-hover/drafts:left-[26px]", "left-0 group-hover/drafts:left-[52px]"];
@@ -58,13 +58,14 @@ export function HeroSection() {
         </div>
       </div>
 
+      {/* Task 1: REMOVED overflow-hidden from motion.article to allow glow to cast freely */}
       <motion.article 
         layout 
-        className="group relative overflow-hidden rounded-[32px] bg-surface shadow-soft-md border border-hairline/40"
+        className="group relative rounded-[32px] bg-surface shadow-soft-md border border-hairline/40"
       >
-        <div className="grid md:grid-cols-[1.4fr_1fr]">
-          {/* Main Hero Container - Removed scale classes and layoutId */}
-          <div className="relative aspect-video md:aspect-auto md:h-full overflow-hidden bg-neutral-100/80 dark:bg-neutral-900/50 rounded-2xl p-4 flex items-center justify-center shadow-inner">
+        <div className="grid md:grid-cols-[1.4fr_1fr] rounded-[32px] overflow-hidden">
+          {/* Task 3: Force strict aspect-video — removed md:aspect-auto md:h-full */}
+          <div className="relative aspect-video bg-neutral-100/80 dark:bg-neutral-900/50 p-4 flex items-center justify-center shadow-inner">
             <AnimatePresence mode="popLayout">
               <motion.img
                 key={`fg-${activeDraftCover}`}
@@ -114,20 +115,19 @@ export function HeroSection() {
                 {activeProject.title}
               </motion.h3>
 
-              {/* Progress Bar with Volume and Typography tweaks */}
+              {/* Task 2: Progress Bar Vertical Infographic */}
               <motion.div layout className="mb-5 flex flex-col gap-2">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-[12.5px] font-bold text-muted-foreground uppercase tracking-wider">진행률</span>
-                  <span className="text-4xl font-black tabular-nums tracking-tighter bg-clip-text text-transparent bg-gradient-to-br from-foreground to-muted-foreground leading-none">
+                <span className="text-sm font-bold text-muted-foreground uppercase">진행률</span>
+                <div className="flex items-center gap-4">
+                  <span className="text-4xl font-black tabular-nums tracking-tighter bg-clip-text text-transparent bg-gradient-to-br from-foreground to-muted-foreground leading-none shrink-0">
                     {activeProject.progress}%
                   </span>
-                </div>
-                {/* Increased volume to h-4 with gradient */}
-                <div className="h-4 w-full overflow-hidden rounded-full bg-muted/60 shadow-inner">
-                  <div
-                    className="h-full rounded-full bg-gradient-to-r from-primary/70 to-primary transition-all duration-700 ease-out"
-                    style={{ width: `${activeProject.progress}%` }}
-                  />
+                  <div className="h-4 w-full overflow-hidden rounded-full bg-muted/60 shadow-inner">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-primary/70 to-primary transition-all duration-700 ease-out"
+                      style={{ width: `${activeProject.progress}%` }}
+                    />
+                  </div>
                 </div>
               </motion.div>
 
@@ -214,7 +214,7 @@ export function HeroSection() {
         </div>
       </motion.article>
 
-      {/* Micro thumbnails slider - Refactored to Split Card Structure */}
+      {/* Micro thumbnails slider — Task 4: Split Card with Blur Matte */}
       <div className="relative group/slider mt-2">
         <button onClick={() => scroll("left")} className="absolute -left-5 top-1/2 -translate-y-1/2 z-[60] grid h-12 w-12 place-items-center rounded-full bg-background/80 backdrop-blur-xl border border-hairline/60 text-foreground shadow-xl opacity-0 group-hover/slider:opacity-100 transition-all duration-300 hover:scale-110 hover:bg-background">
           <ChevronLeft className="h-6 w-6" />
@@ -227,28 +227,35 @@ export function HeroSection() {
           <AnimatePresence mode="popLayout">
             {thumbnails.map((p, index) => (
               <motion.article
-                layoutId={`project-card-${p.id}`} // layoutId applied to the entire card
                 key={p.id}
+                layout
                 onClick={() => handleThumbnailClick(p, index)}
                 className="w-[260px] shrink-0 snap-start rounded-xl border border-border/40 bg-card overflow-hidden hover:shadow-lg transition-all cursor-pointer flex flex-col hover:-translate-y-1 duration-300"
               >
-                {/* Top Half (Image) */}
-                <div className="relative w-full aspect-video border-b border-border/20">
+                {/* Top Half — Blur Matte technique */}
+                <div className="aspect-video relative overflow-hidden rounded-t-xl">
+                  {/* Background Matte (blurred fill) */}
+                  <img
+                    src={p.cover}
+                    alt=""
+                    aria-hidden="true"
+                    loading="lazy"
+                    className="absolute inset-0 w-full h-full object-cover blur-xl opacity-40 scale-110 z-0 pointer-events-none"
+                  />
+                  {/* Foreground (true ratio) */}
                   <img
                     src={p.cover}
                     alt={p.title}
                     loading="lazy"
-                    className="w-full h-full object-cover"
+                    className="relative z-10 w-full h-full object-contain"
                   />
                 </div>
 
                 {/* Bottom Half (Info) */}
-                <div className="p-4 bg-background flex flex-col gap-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <h4 className="text-[14px] font-semibold text-foreground truncate leading-snug">
-                      {p.title}
-                    </h4>
-                  </div>
+                <div className="p-4 bg-background flex flex-col gap-3 border-t border-border/20">
+                  <h4 className="text-[14px] font-semibold text-foreground truncate leading-snug">
+                    {p.title}
+                  </h4>
                   <div className="flex items-center justify-between">
                     <span className="text-[12px] font-medium text-muted-foreground tabular-nums">
                       {p.updatedAt}
