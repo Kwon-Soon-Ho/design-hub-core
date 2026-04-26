@@ -45,6 +45,9 @@ export function HeroSection() {
 
   const listItems = segmentTab === "tasks" ? activeProject.tasks : activeProject.issues;
   const sortedItems = listItems ? [...listItems].sort((a, b) => a.date.localeCompare(b.date)) : [];
+  
+  // Filter out PM from assignees
+  const filteredAssignees = activeProject.assignees?.filter(member => member.name !== activeProject.owner) || [];
 
   return (
     <section className="space-y-6">
@@ -60,18 +63,19 @@ export function HeroSection() {
         className="group relative overflow-hidden rounded-[32px] bg-surface shadow-soft-md border border-hairline/40"
       >
         <div className="grid md:grid-cols-[1.4fr_1fr]">
-          <motion.div layoutId={`project-img-${activeProject.id}`} className="relative aspect-video md:aspect-auto md:h-full overflow-hidden bg-neutral-100/80 dark:bg-neutral-900/50 rounded-2xl p-4 flex items-center justify-center shadow-inner">
+          {/* Main Hero Container - Removed scale classes and layoutId */}
+          <div className="relative aspect-video md:aspect-auto md:h-full overflow-hidden bg-neutral-100/80 dark:bg-neutral-900/50 rounded-2xl p-4 flex items-center justify-center shadow-inner">
             <AnimatePresence mode="popLayout">
               <motion.img
                 key={`fg-${activeDraftCover}`}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 1.05 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ duration: 0.4 }}
                 src={activeDraftCover}
                 alt={activeProject.title}
                 loading="eager"
-                className="relative z-10 w-full h-full object-contain shadow-xl drop-shadow-lg rounded-xl ring-1 ring-black/5 transition-transform duration-700 group-hover:scale-[1.02]"
+                className="relative z-10 w-full h-full object-contain shadow-xl drop-shadow-lg rounded-xl ring-1 ring-black/5 hover:drop-shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] hover:brightness-105 transition-all duration-500"
               />
             </AnimatePresence>
             
@@ -102,7 +106,7 @@ export function HeroSection() {
               </div>
               <span className="text-[11px] font-bold text-foreground tracking-tight ml-2 mr-1 whitespace-nowrap opacity-90">+3 시안</span>
             </div>
-          </motion.div>
+          </div>
 
           <div className="flex flex-col p-7 md:p-8 gap-5 relative z-20 bg-surface">
             <div>
@@ -110,33 +114,36 @@ export function HeroSection() {
                 {activeProject.title}
               </motion.h3>
 
-              {/* Progress Bar restored under title with massive typography */}
-              <motion.div layout className="mb-5">
-                <div className="flex items-baseline gap-2 mb-2">
-                  <span className="text-[12px] font-bold text-muted-foreground uppercase tracking-wider">진행률</span>
-                  <span className="text-5xl font-black tabular-nums tracking-tighter bg-clip-text text-transparent bg-gradient-to-br from-foreground to-muted-foreground leading-none">
+              {/* Progress Bar with Volume and Typography tweaks */}
+              <motion.div layout className="mb-5 flex flex-col gap-2">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-[12.5px] font-bold text-muted-foreground uppercase tracking-wider">진행률</span>
+                  <span className="text-4xl font-black tabular-nums tracking-tighter bg-clip-text text-transparent bg-gradient-to-br from-foreground to-muted-foreground leading-none">
                     {activeProject.progress}%
                   </span>
                 </div>
-                <div className="h-[2px] w-full overflow-hidden rounded-full bg-muted/60">
+                {/* Increased volume to h-4 with gradient */}
+                <div className="h-4 w-full overflow-hidden rounded-full bg-muted/60 shadow-inner">
                   <div
-                    className="h-full rounded-full bg-foreground transition-all duration-700 ease-out"
+                    className="h-full rounded-full bg-gradient-to-r from-primary/70 to-primary transition-all duration-700 ease-out"
                     style={{ width: `${activeProject.progress}%` }}
                   />
                 </div>
               </motion.div>
 
               {/* Metadata row */}
-              <motion.div layout className="flex flex-wrap items-center gap-2">
+              <motion.div layout className="flex flex-wrap items-center gap-2 mt-4">
                 <span className="inline-flex items-center rounded-full bg-surface px-3 py-1 text-[11px] font-bold text-foreground border border-hairline/60 shadow-sm">
                   PM: {activeProject.owner}
                 </span>
                 <span className="inline-flex items-center rounded-full bg-surface px-3 py-1 text-[11px] font-bold text-foreground border border-hairline/60 shadow-sm">
                   협업: 경영기획팀
                 </span>
-                <span className="inline-flex items-center rounded-full bg-surface px-3 py-1 text-[11px] font-bold text-foreground border border-hairline/60 shadow-sm">
-                  담당자: {activeProject.assignees?.map(a => a.name).join(", ") || "배정 전"}
-                </span>
+                {filteredAssignees.length > 0 && (
+                  <span className="inline-flex items-center rounded-full bg-surface px-3 py-1 text-[11px] font-bold text-foreground border border-hairline/60 shadow-sm">
+                    담당자: {filteredAssignees.map(a => a.name).join(", ")}
+                  </span>
+                )}
               </motion.div>
             </div>
 
@@ -207,7 +214,7 @@ export function HeroSection() {
         </div>
       </motion.article>
 
-      {/* Micro thumbnails slider */}
+      {/* Micro thumbnails slider - Refactored to Split Card Structure */}
       <div className="relative group/slider mt-2">
         <button onClick={() => scroll("left")} className="absolute -left-5 top-1/2 -translate-y-1/2 z-[60] grid h-12 w-12 place-items-center rounded-full bg-background/80 backdrop-blur-xl border border-hairline/60 text-foreground shadow-xl opacity-0 group-hover/slider:opacity-100 transition-all duration-300 hover:scale-110 hover:bg-background">
           <ChevronLeft className="h-6 w-6" />
@@ -220,47 +227,37 @@ export function HeroSection() {
           <AnimatePresence mode="popLayout">
             {thumbnails.map((p, index) => (
               <motion.article
-                layoutId={`project-img-${p.id}`}
+                layoutId={`project-card-${p.id}`} // layoutId applied to the entire card
                 key={p.id}
                 onClick={() => handleThumbnailClick(p, index)}
-                className="relative shrink-0 snap-start overflow-hidden rounded-[24px] bg-surface w-[280px] aspect-video cursor-pointer hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(255,255,255,0.2)] dark:hover:shadow-[0_12px_30px_rgba(255,255,255,0.08)] hover:z-50 transition-all duration-400"
+                className="w-[260px] shrink-0 snap-start rounded-xl border border-border/40 bg-card overflow-hidden hover:shadow-lg transition-all cursor-pointer flex flex-col hover:-translate-y-1 duration-300"
               >
-                <div className="absolute inset-0 z-20 ring-1 ring-white/20 rounded-[24px] pointer-events-none shadow-[inset_0_0_20px_rgba(255,255,255,0.05)]" />
-                <img
-                  src={p.cover}
-                  alt={p.title}
-                  loading="lazy"
-                  className="absolute inset-0 h-full w-full object-cover blur-3xl opacity-80 scale-110 pointer-events-none"
-                />
-                <img
-                  src={p.cover}
-                  alt={p.title}
-                  loading="lazy"
-                  className="absolute inset-0 h-full w-full object-contain object-center z-10 pointer-events-none"
-                />
-                {/* Premium Black Dim Gradient */}
-                <div className="absolute inset-0 z-15 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none" />
-
-                <div className="absolute left-4 top-4 z-30 pointer-events-none">
-                  <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-bold shadow-md backdrop-blur-md ${cellChipClass[p.cell]}`}>
-                    {cellLabel[p.cell]}
-                  </span>
+                {/* Top Half (Image) */}
+                <div className="relative w-full aspect-video border-b border-border/20">
+                  <img
+                    src={p.cover}
+                    alt={p.title}
+                    loading="lazy"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
 
-                <div className="absolute inset-x-0 bottom-0 p-5 text-white z-30 pointer-events-none">
-                  <div className="mb-2 flex items-center gap-2">
-                    <span
-                      className={`h-2.5 w-2.5 rounded-full shadow-sm ${
-                        p.status === "issue" ? "bg-red-500" : p.status === "done" ? "bg-emerald-500" : p.status === "ongoing" ? "bg-indigo-400" : "bg-blue-500"
-                      }`}
-                    />
-                    <span className="text-[11px] font-bold tracking-wider opacity-100">
-                      {p.status === "issue" ? "이슈" : p.status === "ongoing" ? "상시" : p.status === "done" ? "완료" : "진행 중"}
-                    </span>
-                    <span className="ml-auto text-[11px] font-bold opacity-100 tracking-tight bg-black/40 px-2 py-0.5 rounded-full backdrop-blur-sm">D-{p.dDay}</span>
+                {/* Bottom Half (Info) */}
+                <div className="p-4 bg-background flex flex-col gap-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <h4 className="text-[14px] font-semibold text-foreground truncate leading-snug">
+                      {p.title}
+                    </h4>
                   </div>
-                  <div className="line-clamp-2 text-[15px] font-bold leading-snug tracking-tight text-white/95">
-                    {p.title}
+                  <div className="flex items-center justify-between">
+                    <span className="text-[12px] font-medium text-muted-foreground tabular-nums">
+                      {p.updatedAt}
+                    </span>
+                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${
+                      p.status === "issue" ? "bg-red-500/10 text-red-500 border-red-500/20" : p.status === "done" ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" : p.status === "ongoing" ? "bg-indigo-400/10 text-indigo-400 border-indigo-400/20" : "bg-blue-500/10 text-blue-500 border-blue-500/20"
+                    }`}>
+                      {statusLabel[p.status] || "진행 중"}
+                    </span>
                   </div>
                 </div>
               </motion.article>
