@@ -10,12 +10,12 @@ const tabs: { value: TabValue; label: string }[] = [
   { value: "edit",  label: "편집" },
 ];
 
-// Subtle brand-colored hover tint for inactive tabs (10% opacity)
+// Task 4: Brand-colored hover — bg tint (10%) + 100% brand text color on hover
 const tabHoverClass: Record<TabValue, string> = {
-  all:   "hover:bg-foreground/5",
-  video: "hover:bg-cell-video-soft/50",
-  ux:    "hover:bg-cell-ux-soft/50",
-  edit:  "hover:bg-cell-edit-soft/50",
+  all:   "hover:bg-foreground/5   hover:text-foreground",
+  video: "hover:bg-cell-video-soft/50 hover:text-cell-video",
+  ux:    "hover:bg-cell-ux-soft/50    hover:text-cell-ux",
+  edit:  "hover:bg-cell-edit-soft/50  hover:text-cell-edit",
 };
 
 interface Props {
@@ -36,7 +36,7 @@ export function CellTabs({ value, onChange }: Props) {
             className={`relative px-3 py-2 rounded-lg text-[15px] transition-all ${
               isActive
                 ? "font-black text-foreground"
-                : `font-semibold text-muted-foreground hover:text-foreground ${tabHoverClass[t.value]}`
+                : `font-semibold text-muted-foreground ${tabHoverClass[t.value]}`
             }`}
           >
             {t.label}

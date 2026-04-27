@@ -35,12 +35,12 @@ export function HeroSection() {
     }
   };
 
-  // Task 4: Scroll → thumb progress (0 to 400 maps 20%-wide thumb across 80% remaining space)
+  // Task 5: 15%-wide thumb translates 0→566% (100/15 * 85 ≈ 566)
   const handleScroll = () => {
     if (!scrollRef.current) return;
     const { scrollLeft: sl, scrollWidth, clientWidth } = scrollRef.current;
     const max = scrollWidth - clientWidth;
-    setScrollProgress(max > 0 ? (sl / max) * 400 : 0);
+    setScrollProgress(max > 0 ? (sl / max) * 566 : 0);
   };
 
   // Drag-to-scroll handlers
@@ -108,30 +108,31 @@ export function HeroSection() {
       >
         <div className="grid md:grid-cols-[1.4fr_1fr] rounded-[32px] overflow-hidden">
 
-          {/* Task 1: Hero image — locked container + Blur Matte */}
-          <div className="aspect-video md:aspect-auto md:h-[480px] relative overflow-hidden rounded-2xl flex items-center justify-center bg-surface">
+          {/* Task 3: Hero image — locked container h-[520px] + upgraded Blur Matte */}
+          <div className="aspect-video md:aspect-auto md:h-[520px] relative overflow-hidden rounded-2xl flex items-center justify-center bg-surface">
+            {/* Task 3: Background — blur-3xl opacity-30 */}
+            <img
+              key={`bg-${activeDraftCover}`}
+              src={activeDraftCover}
+              alt=""
+              aria-hidden="true"
+              draggable={false}
+              className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-30 scale-110 pointer-events-none"
+            />
+            {/* Task 3: Foreground — hover glow animation restored */}
             <AnimatePresence mode="popLayout">
-              {/* Background: blurred fill matte */}
-              <img
-                key={`bg-${activeDraftCover}`}
-                src={activeDraftCover}
-                alt=""
-                aria-hidden="true"
-                draggable={false}
-                className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-110 pointer-events-none"
-              />
-              {/* Foreground: true-ratio image with floating shadow */}
               <motion.img
                 key={`fg-${activeDraftCover}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.4 }}
+                whileHover={{ filter: "drop-shadow(0 28px 56px rgba(0,0,0,0.42)) brightness(1.05)" }}
                 src={activeDraftCover}
                 alt={activeProject.title}
                 loading="eager"
                 draggable={false}
-                className="relative z-10 w-full h-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)] p-4"
+                className="relative z-10 w-full h-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)] p-6 transition-[filter] duration-500"
               />
             </AnimatePresence>
 
@@ -246,8 +247,9 @@ export function HeroSection() {
                       className="bg-white/40 dark:bg-black/40 backdrop-blur-md border border-border/50 rounded-xl p-3 mb-2 flex items-center gap-3 shadow-sm hover:shadow-md transition-shadow"
                     >
                       <span className="text-[11.5px] font-bold text-muted-foreground tabular-nums shrink-0 w-[42px]">{item.date}</span>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-[13px] font-bold text-foreground truncate">{item.title}</div>
+                      {/* Task 1: flex-1 min-w-0 + truncate ensures ellipsis before status badge */}
+                      <div className="flex-1 min-w-0 overflow-hidden">
+                        <div className="text-[13px] font-bold text-foreground truncate leading-snug" title={item.title}>{item.title}</div>
                       </div>
                       <span className={`shrink-0 inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${
                         item.status === "issue" ? "bg-red-500/10 text-red-500 border-red-500/20" : item.status === "done" ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" : item.status === "ongoing" ? "bg-indigo-400/10 text-indigo-400 border-indigo-400/20" : "bg-blue-500/10 text-blue-500 border-blue-500/20"
@@ -340,10 +342,10 @@ export function HeroSection() {
           </AnimatePresence>
         </div>
 
-        {/* Task 4: Scrollbar thumb indicator (20%-wide thumb, translateX 0–400%) */}
-        <div className="h-1.5 w-full bg-border/40 rounded-full overflow-hidden mt-4 relative">
+        {/* Task 5: Thumb scrollbar — 15%-wide thumb, translateX 0–566% */}
+        <div className="h-1 w-full bg-border/30 rounded-full mt-4 relative">
           <div
-            className="absolute top-0 bottom-0 left-0 h-full w-[20%] bg-foreground/50 rounded-full transition-transform duration-75 ease-out"
+            className="absolute h-full w-[15%] bg-foreground/40 rounded-full transition-transform duration-100 ease-out"
             style={{ transform: `translateX(${scrollProgress}%)` }}
           />
         </div>
