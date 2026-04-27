@@ -108,36 +108,32 @@ export function HeroSection() {
       >
         <div className="grid h-auto md:h-[780px] md:grid-cols-[1.4fr_1fr] rounded-[32px] overflow-hidden">
 
-          {/* Task 1: Hero image — Layer-separated Blur Matte (overflow-hidden only on bg layer) */}
-          <div className="relative flex items-center justify-center bg-surface h-full">
-            {/* Task 1: Background-ONLY layer — overflow-hidden traps blur, shadow escapes freely */}
-            <div className="absolute inset-0 overflow-hidden rounded-l-[32px] z-0">
-              <img
-                src={activeDraftCover}
-                alt=""
-                aria-hidden="true"
-                draggable={false}
-                className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-30 scale-110 pointer-events-none"
-              />
-            </div>
+          {/* Hero image — overflow-hidden traps shadow inside rounded corners; both images are absolute so they never dictate height */}
+          <div className="relative overflow-hidden flex items-center justify-center bg-surface h-full">
+            {/* Background blur matte — absolute, fills container */}
+            <img
+              src={activeDraftCover}
+              alt=""
+              aria-hidden="true"
+              draggable={false}
+              className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-30 scale-110 pointer-events-none z-0"
+            />
 
-            {/* Task 1: Foreground — outside overflow-hidden, shadow casts freely */}
+            {/* Task 2: Foreground — absolute inset-0 so it NEVER drives container height */}
             <AnimatePresence mode="popLayout">
-              <div key={`wrap-${activeDraftCover}`} className="relative z-10 p-6 w-full h-full flex items-center justify-center">
-                <motion.img
-                  key={`fg-${activeDraftCover}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4 }}
-                  whileHover={{ filter: "drop-shadow(0 28px 56px rgba(0,0,0,0.42)) brightness(1.05)" }}
-                  src={activeDraftCover}
-                  alt={activeProject.title}
-                  loading="eager"
-                  draggable={false}
-                  className="max-w-full max-h-full w-auto h-auto object-cover rounded-2xl drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-[filter] duration-500"
-                />
-              </div>
+              <motion.img
+                key={`fg-${activeDraftCover}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4 }}
+                whileHover={{ filter: "drop-shadow(0 28px 56px rgba(0,0,0,0.42)) brightness(1.05)" }}
+                src={activeDraftCover}
+                alt={activeProject.title}
+                loading="eager"
+                draggable={false}
+                className="absolute inset-0 w-full h-full object-contain p-6 z-10 drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-[filter] duration-500"
+              />
             </AnimatePresence>
 
             {/* Chips overlay */}
