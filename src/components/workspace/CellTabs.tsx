@@ -10,12 +10,12 @@ const tabs: { value: TabValue; label: string }[] = [
   { value: "edit",  label: "편집" },
 ];
 
-// Task 4: Brand-colored hover — bg tint (10%) + 100% brand text color on hover
+// Task 1: Text-only hover — bg is always transparent
 const tabHoverClass: Record<TabValue, string> = {
-  all:   "hover:bg-foreground/5   hover:text-foreground",
-  video: "hover:bg-cell-video-soft/50 hover:text-cell-video",
-  ux:    "hover:bg-cell-ux-soft/50    hover:text-cell-ux",
-  edit:  "hover:bg-cell-edit-soft/50  hover:text-cell-edit",
+  all:   "hover:bg-transparent hover:text-foreground",
+  video: "hover:bg-transparent hover:text-cell-video",
+  ux:    "hover:bg-transparent hover:text-cell-ux",
+  edit:  "hover:bg-transparent hover:text-cell-edit",
 };
 
 interface Props {

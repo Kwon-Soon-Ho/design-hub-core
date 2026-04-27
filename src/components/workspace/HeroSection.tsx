@@ -119,21 +119,23 @@ export function HeroSection() {
               draggable={false}
               className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-30 scale-110 pointer-events-none"
             />
-            {/* Task 3: Foreground — rounded-2xl added, hover glow animation restored */}
+            {/* Task 3: Foreground — wrapped in p-6 container; max-w/h let rounded-2xl actually clip the image corners */}
             <AnimatePresence mode="popLayout">
-              <motion.img
-                key={`fg-${activeDraftCover}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.4 }}
-                whileHover={{ filter: "drop-shadow(0 28px 56px rgba(0,0,0,0.42)) brightness(1.05)" }}
-                src={activeDraftCover}
-                alt={activeProject.title}
-                loading="eager"
-                draggable={false}
-                className="relative z-10 w-full h-full object-contain rounded-2xl drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)] p-6 transition-[filter] duration-500"
-              />
+              <div key={`wrap-${activeDraftCover}`} className="relative z-10 p-6 w-full h-full flex items-center justify-center">
+                <motion.img
+                  key={`fg-${activeDraftCover}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.4 }}
+                  whileHover={{ filter: "drop-shadow(0 28px 56px rgba(0,0,0,0.42)) brightness(1.05)" }}
+                  src={activeDraftCover}
+                  alt={activeProject.title}
+                  loading="eager"
+                  draggable={false}
+                  className="max-w-full max-h-full object-contain rounded-2xl drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-[filter] duration-500"
+                />
+              </div>
             </AnimatePresence>
 
             {/* Chips overlay */}
@@ -171,11 +173,11 @@ export function HeroSection() {
           {/* Task 1: Right panel — h-full Flexbox layout */}
           <div className="flex flex-col h-full p-7 md:p-8 gap-5 relative z-20 bg-surface">
             <div className="shrink-0">
-              <motion.h3 layout className="text-2xl md:text-[26px] font-bold tracking-tight leading-snug text-foreground line-clamp-2 mb-3">
+              <h3 className="text-2xl md:text-[26px] font-bold tracking-tight leading-snug text-foreground line-clamp-2 mb-3">
                 {activeProject.title}
-              </motion.h3>
+              </h3>
 
-              <motion.div layout className="mb-5 flex flex-col gap-2">
+              <div className="mb-5 flex flex-col gap-2">
                 <span className="text-sm font-bold text-muted-foreground uppercase">진행률</span>
                 <div className="flex items-center gap-4">
                   <span className="text-4xl font-black tabular-nums tracking-tighter bg-clip-text text-transparent bg-gradient-to-br from-foreground to-muted-foreground leading-none shrink-0">
@@ -188,9 +190,9 @@ export function HeroSection() {
                     />
                   </div>
                 </div>
-              </motion.div>
+              </div>
 
-              <motion.div layout className="flex flex-wrap items-center gap-2 mt-4">
+              <div className="flex flex-wrap items-center gap-2 mt-4">
                 <span className="inline-flex items-center rounded-full bg-surface px-3 py-1 text-[11px] font-bold text-foreground border border-hairline/60 shadow-sm">
                   PM: {activeProject.owner}
                 </span>
@@ -202,20 +204,20 @@ export function HeroSection() {
                     담당자: {filteredAssignees.map(a => a.name).join(", ")}
                   </span>
                 )}
-              </motion.div>
+              </div>
             </div>
 
-            <motion.div layout className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 shrink-0">
               <div className="bg-surface/50 border border-hairline/40 rounded-xl p-3 flex flex-col justify-center shadow-sm backdrop-blur-sm transition-colors hover:bg-surface">
                 <span className="text-[12.5px] font-bold text-foreground tracking-tight">🗓️ 기간: 2026.04.01 - 2026.12.31</span>
               </div>
               <div className="bg-surface/50 border border-hairline/40 rounded-xl p-3 flex flex-col justify-center shadow-sm backdrop-blur-sm transition-colors hover:bg-surface">
                 <span className="text-[12.5px] font-bold text-destructive tracking-tight">⏰ 마감: 2026년 12월 31일 (D-{activeProject.dDay})</span>
               </div>
-            </motion.div>
+            </div>
 
-            {/* Segment panel — flex-1 min-h-0 allows internal scrolling */}
-            <motion.div layout className="flex-1 min-h-0 flex flex-col bg-background/50 border border-border/40 rounded-[20px] p-5 shadow-sm">
+            {/* Task 2: Segment panel — layout prop REMOVED to fix Framer Motion flex-shrink override */}
+            <div className="flex-1 min-h-0 flex flex-col bg-background/50 border border-border/40 rounded-[20px] p-5 shadow-sm">
               <div className="flex items-center gap-1 bg-muted/50 p-1 rounded-lg mb-4 w-fit shrink-0">
                 <button
                   onClick={() => setSegmentTab("tasks")}
@@ -269,7 +271,7 @@ export function HeroSection() {
                   프로젝트 상세 보기 <ArrowUpRight className="h-4 w-4" />
                 </button>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </motion.article>
@@ -298,7 +300,7 @@ export function HeroSection() {
                 key={p.id}
                 layout
                 onClick={() => handleThumbnailClick(p, index)}
-                className="w-[260px] shrink-0 snap-start rounded-xl border border-border/80 dark:border-neutral-700 bg-card overflow-hidden hover:shadow-lg transition-all cursor-pointer flex flex-col hover:-translate-y-1 duration-300"
+                className="w-[260px] shrink-0 snap-start rounded-xl border-2 border-neutral-200 dark:border-neutral-700 shadow-sm bg-card overflow-hidden hover:shadow-lg transition-all cursor-pointer flex flex-col hover:-translate-y-1 duration-300"
               >
                 {/* Task 2/4: Thumbnail — fixed height Blur Matte + GPU Optimization */}
                 <div className="h-[140px] relative overflow-hidden bg-surface">
