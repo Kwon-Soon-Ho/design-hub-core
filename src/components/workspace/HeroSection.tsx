@@ -35,12 +35,12 @@ export function HeroSection() {
     }
   };
 
-  // Task 5: 15%-wide thumb translates 0→566% (100/15 * 85 ≈ 566)
+  // Task 5: Calculate raw progress (0 to 1) to multiply by 400 for a 20% width thumb
   const handleScroll = () => {
     if (!scrollRef.current) return;
     const { scrollLeft: sl, scrollWidth, clientWidth } = scrollRef.current;
-    const max = scrollWidth - clientWidth;
-    setScrollProgress(max > 0 ? (sl / max) * 566 : 0);
+    const maxScrollLeft = scrollWidth - clientWidth;
+    setScrollProgress(maxScrollLeft > 0 ? sl / maxScrollLeft : 0);
   };
 
   // Drag-to-scroll handlers
@@ -106,10 +106,10 @@ export function HeroSection() {
         layout
         className="group relative rounded-[32px] bg-surface shadow-soft-md border border-hairline/40"
       >
-        <div className="grid md:grid-cols-[1.4fr_1fr] rounded-[32px] overflow-hidden">
+        <div className="grid h-auto md:h-[560px] md:grid-cols-[1.4fr_1fr] rounded-[32px] overflow-hidden">
 
-          {/* Task 3: Hero image — locked container h-[520px] + upgraded Blur Matte */}
-          <div className="aspect-video md:aspect-auto md:h-[520px] relative overflow-hidden rounded-2xl flex items-center justify-center bg-surface">
+          {/* Task 3: Hero image — upgraded Blur Matte */}
+          <div className="relative overflow-hidden flex items-center justify-center bg-surface h-full">
             {/* Task 3: Background — blur-3xl opacity-30 */}
             <img
               key={`bg-${activeDraftCover}`}
@@ -119,7 +119,7 @@ export function HeroSection() {
               draggable={false}
               className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-30 scale-110 pointer-events-none"
             />
-            {/* Task 3: Foreground — hover glow animation restored */}
+            {/* Task 3: Foreground — rounded-2xl added, hover glow animation restored */}
             <AnimatePresence mode="popLayout">
               <motion.img
                 key={`fg-${activeDraftCover}`}
@@ -132,7 +132,7 @@ export function HeroSection() {
                 alt={activeProject.title}
                 loading="eager"
                 draggable={false}
-                className="relative z-10 w-full h-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)] p-6 transition-[filter] duration-500"
+                className="relative z-10 w-full h-full object-contain rounded-2xl drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)] p-6 transition-[filter] duration-500"
               />
             </AnimatePresence>
 
@@ -168,9 +168,9 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* Right panel — Strict Flexbox layout */}
-          <div className="flex flex-col p-7 md:p-8 gap-5 relative z-20 bg-surface">
-            <div>
+          {/* Task 1: Right panel — h-full Flexbox layout */}
+          <div className="flex flex-col h-full p-7 md:p-8 gap-5 relative z-20 bg-surface">
+            <div className="shrink-0">
               <motion.h3 layout className="text-2xl md:text-[26px] font-bold tracking-tight leading-snug text-foreground line-clamp-2 mb-3">
                 {activeProject.title}
               </motion.h3>
@@ -214,7 +214,7 @@ export function HeroSection() {
               </div>
             </motion.div>
 
-            {/* Segment panel — list stretches, button anchored at bottom */}
+            {/* Segment panel — flex-1 min-h-0 allows internal scrolling */}
             <motion.div layout className="flex-1 min-h-0 flex flex-col bg-background/50 border border-border/40 rounded-[20px] p-5 shadow-sm">
               <div className="flex items-center gap-1 bg-muted/50 p-1 rounded-lg mb-4 w-fit shrink-0">
                 <button
@@ -235,7 +235,7 @@ export function HeroSection() {
                 </button>
               </div>
 
-              <div className="overflow-y-auto flex-1 min-h-[240px] custom-scrollbar pr-2">
+              <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-2">
                 <AnimatePresence mode="popLayout">
                   {sortedItems.map((item) => (
                     <motion.div
@@ -298,18 +298,18 @@ export function HeroSection() {
                 key={p.id}
                 layout
                 onClick={() => handleThumbnailClick(p, index)}
-                className="w-[260px] shrink-0 snap-start rounded-xl border border-border/40 bg-card overflow-hidden hover:shadow-lg transition-all cursor-pointer flex flex-col hover:-translate-y-1 duration-300"
+                className="w-[260px] shrink-0 snap-start rounded-xl border border-border/80 dark:border-neutral-700 bg-card overflow-hidden hover:shadow-lg transition-all cursor-pointer flex flex-col hover:-translate-y-1 duration-300"
               >
-                {/* Task 2: Thumbnail — fixed height Blur Matte */}
+                {/* Task 2/4: Thumbnail — fixed height Blur Matte + GPU Optimization */}
                 <div className="h-[140px] relative overflow-hidden bg-surface">
-                  {/* Background blurred matte */}
+                  {/* Background blurred matte with will-change-transform */}
                   <img
                     src={p.cover}
                     alt=""
                     aria-hidden="true"
                     loading="lazy"
                     draggable={false}
-                    className="absolute inset-0 w-full h-full object-cover blur-xl opacity-40 scale-110 z-0 pointer-events-none"
+                    className="absolute inset-0 w-full h-full object-cover blur-xl opacity-40 scale-110 z-0 pointer-events-none will-change-transform"
                   />
                   {/* Foreground true-ratio image */}
                   <img
@@ -342,11 +342,11 @@ export function HeroSection() {
           </AnimatePresence>
         </div>
 
-        {/* Task 5: Thumb scrollbar — 15%-wide thumb, translateX 0–566% */}
+        {/* Task 5: Thumb scrollbar — 20%-wide relative thumb, exact translation */}
         <div className="h-1 w-full bg-border/30 rounded-full mt-4 relative">
           <div
-            className="absolute h-full w-[15%] bg-foreground/40 rounded-full transition-transform duration-100 ease-out"
-            style={{ transform: `translateX(${scrollProgress}%)` }}
+            className="absolute top-0 left-0 h-full w-1/5 bg-foreground/40 rounded-full transition-transform duration-100 ease-out"
+            style={{ transform: `translateX(${scrollProgress * 400}%)` }}
           />
         </div>
       </div>
