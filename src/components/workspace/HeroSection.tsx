@@ -19,6 +19,8 @@ export function HeroSection() {
 
   // Drag-to-scroll state
   const scrollRef = useRef<HTMLDivElement>(null);
+  // Task 3: Ref for the task/issue list — resets scrollTop on tab change
+  const listRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
   const startX = useRef(0);
   const scrollLeftRef = useRef(0);
@@ -27,6 +29,13 @@ export function HeroSection() {
   useEffect(() => {
     setActiveDraftCover(activeProject.cover);
   }, [activeProject]);
+
+  // Task 3: Reset list scroll position when tab changes
+  useEffect(() => {
+    if (listRef.current) {
+      listRef.current.scrollTop = 0;
+    }
+  }, [segmentTab]);
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -240,16 +249,24 @@ export function HeroSection() {
                 </button>
               </div>
 
-              <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border/60">
-                <AnimatePresence mode="popLayout">
-                  {sortedItems.map((item) => (
-                    <motion.div
-                      key={item.id}
-                      initial={{ opacity: 0, y: 5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      transition={{ duration: 0.2 }}
-                      className="bg-white/40 dark:bg-black/40 backdrop-blur-md border border-border/50 rounded-xl p-3 mb-2 flex items-center gap-3 shadow-sm hover:shadow-md transition-shadow"
+              <div
+                ref={listRef}
+                className="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border/60"
+              >
+                {/* Task 2: mode='wait' ensures old list fully exits before new one enters — prevents height doubling */}
+                <AnimatePresence mode="wait">
+                  {/* Task 2: Crossfade only — no y-axis movement that causes layout jump */}
+                  <motion.div
+                    key={segmentTab}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.18 }}
+                  >
+                    {sortedItems.map((item) => (
+                      <div
+                        key={item.id}
+                        className="bg-white/40 dark:bg-black/40 backdrop-blur-md border border-border/50 rounded-xl p-3 mb-2 flex items-center gap-3 shadow-sm hover:shadow-md transition-shadow"
                     >
                       <span className="text-[11.5px] font-bold text-muted-foreground tabular-nums shrink-0 w-[42px]">{item.date}</span>
                       {/* Task 1: flex-1 min-w-0 + truncate ensures ellipsis before status badge */}
@@ -269,14 +286,16 @@ export function HeroSection() {
                           ? (item.status === "issue" ? "이슈" : "해결")
                           : (statusLabel[item.status] || "진행 중")}
                       </span>
-                    </motion.div>
-                  ))}
+                      </div>
+                    ))}
+                    {sortedItems.length === 0 && (
+                      <p className="text-[13px] text-muted-foreground leading-relaxed py-4 text-center">등록된 항목이 없습니다.</p>
+                    )}
+                  </motion.div>
                 </AnimatePresence>
-                {sortedItems.length === 0 && (
-                  <p className="text-[13px] text-muted-foreground leading-relaxed py-4 text-center">등록된 항목이 없습니다.</p>
-                )}
               </div>
 
+              {/* Task 4: shrink-0 strictly protects button from being pushed off-screen */}
               <div className="shrink-0 pt-4 mt-auto flex justify-end z-20">
                 <button className="inline-flex items-center gap-1.5 rounded-[12px] bg-foreground px-5 py-2.5 text-[13px] font-bold text-background hover:scale-105 transition-all shadow-md active:scale-95">
                   프로젝트 상세 보기 <ArrowUpRight className="h-4 w-4" />
