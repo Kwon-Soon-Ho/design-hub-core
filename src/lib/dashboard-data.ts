@@ -52,8 +52,6 @@ export const priorityLabel: Record<Priority, string> = {
   low: "낮음",
 };
 
-// 16:9 helper (w=1600, h=900)
-const img16x9 = (id: string) =>
 // 16:9 helper — w=1200 for fast high-res loading
 const img16x9 = (id: string) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1200&h=675&q=80`;
