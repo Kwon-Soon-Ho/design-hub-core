@@ -108,18 +108,20 @@ export function HeroSection() {
       >
         <div className="grid h-auto md:h-[780px] md:grid-cols-[1.4fr_1fr] rounded-[32px] overflow-hidden">
 
-          {/* Task 3: Hero image — upgraded Blur Matte */}
-          <div className="relative overflow-hidden flex items-center justify-center bg-surface h-full">
-            {/* Task 3: Background — blur-3xl opacity-30 */}
-            <img
-              key={`bg-${activeDraftCover}`}
-              src={activeDraftCover}
-              alt=""
-              aria-hidden="true"
-              draggable={false}
-              className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-30 scale-110 pointer-events-none"
-            />
-            {/* Task 3: Foreground — wrapped in p-6 container; max-w/h let rounded-2xl actually clip the image corners */}
+          {/* Task 1: Hero image — Layer-separated Blur Matte (overflow-hidden only on bg layer) */}
+          <div className="relative flex items-center justify-center bg-surface h-full">
+            {/* Task 1: Background-ONLY layer — overflow-hidden traps blur, shadow escapes freely */}
+            <div className="absolute inset-0 overflow-hidden rounded-l-[32px] z-0">
+              <img
+                src={activeDraftCover}
+                alt=""
+                aria-hidden="true"
+                draggable={false}
+                className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-30 scale-110 pointer-events-none"
+              />
+            </div>
+
+            {/* Task 1: Foreground — outside overflow-hidden, shadow casts freely */}
             <AnimatePresence mode="popLayout">
               <div key={`wrap-${activeDraftCover}`} className="relative z-10 p-6 w-full h-full flex items-center justify-center">
                 <motion.img
@@ -133,7 +135,7 @@ export function HeroSection() {
                   alt={activeProject.title}
                   loading="eager"
                   draggable={false}
-                  className="max-w-full max-h-full w-auto h-auto object-contain rounded-2xl drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-[filter] duration-500"
+                  className="max-w-full max-h-full w-auto h-auto object-cover rounded-2xl drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-[filter] duration-500"
                 />
               </div>
             </AnimatePresence>
@@ -170,8 +172,8 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* Task 1: Right panel — h-full Flexbox layout */}
-          <div className="flex flex-col h-full p-7 md:p-8 gap-5 relative z-20 bg-surface">
+          {/* Task 2: Right panel — min-h-0 added to complete the Flexbox chain */}
+          <div className="flex flex-col h-full min-h-0 p-7 md:p-8 gap-5 relative z-20 bg-surface">
             <div className="shrink-0">
               <h3 className="text-2xl md:text-[26px] font-bold tracking-tight leading-snug text-foreground line-clamp-2 mb-3">
                 {activeProject.title}
@@ -300,7 +302,7 @@ export function HeroSection() {
                 key={p.id}
                 layout
                 onClick={() => handleThumbnailClick(p, index)}
-                className="w-[260px] shrink-0 snap-start rounded-xl border border-neutral-400 dark:border-neutral-600 shadow-sm bg-card overflow-hidden hover:shadow-lg transition-all cursor-pointer flex flex-col hover:-translate-y-1 duration-300"
+                className="w-[260px] shrink-0 snap-start rounded-xl border border-foreground/20 shadow-sm bg-card overflow-hidden hover:shadow-lg transition-all cursor-pointer flex flex-col hover:-translate-y-1 duration-300"
               >
                 {/* Task 2/4: Thumbnail — fixed height Blur Matte + GPU Optimization */}
                 <div className="h-[140px] relative overflow-hidden bg-surface">
