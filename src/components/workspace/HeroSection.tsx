@@ -132,7 +132,7 @@ export function HeroSection() {
                 alt={activeProject.title}
                 loading="eager"
                 draggable={false}
-                className="absolute inset-0 w-full h-full object-contain p-6 z-10 drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-[filter] duration-500"
+                className="absolute inset-0 w-full h-full object-contain rounded-2xl p-6 z-10 drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-[filter] duration-500"
               />
             </AnimatePresence>
 
@@ -252,9 +252,17 @@ export function HeroSection() {
                         <div className="text-[13px] font-bold text-foreground truncate leading-snug" title={item.title}>{item.title}</div>
                       </div>
                       <span className={`shrink-0 inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${
-                        item.status === "issue" ? "bg-red-500/10 text-red-500 border-red-500/20" : item.status === "done" ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" : item.status === "ongoing" ? "bg-indigo-400/10 text-indigo-400 border-indigo-400/20" : "bg-blue-500/10 text-blue-500 border-blue-500/20"
+                        item.status === "issue"
+                          ? "bg-red-500/10 text-red-500 border-red-500/20"
+                          : item.status === "done"
+                          ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                          : item.status === "ongoing"
+                          ? "bg-indigo-400/10 text-indigo-400 border-indigo-400/20"
+                          : "bg-blue-500/10 text-blue-500 border-blue-500/20"
                       }`}>
-                        {statusLabel[item.status] || "진행 중"}
+                        {segmentTab === "issues"
+                          ? (item.status === "issue" ? "이슈" : "해결")
+                          : (statusLabel[item.status] || "진행 중")}
                       </span>
                     </motion.div>
                   ))}
@@ -317,7 +325,7 @@ export function HeroSection() {
                     alt={p.title}
                     loading="lazy"
                     draggable={false}
-                    className="relative z-10 w-full h-full object-contain"
+                    className="relative z-10 w-full h-full object-contain rounded-xl"
                   />
                 </div>
 

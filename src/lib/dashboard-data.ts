@@ -102,15 +102,15 @@ export const featured: Project = {
     { id: "t12", title: "스테이크홀더 최종 승인 요청", status: "progress", date: "10.31" },
   ],
   issues: [
-    // Task 2: Long title stress-test samples
+    // status: "issue" = 미해결 이슈, "done" = 해결 완료
     { id: "i1", title: "신규 브랜드 아이덴티티 수립을 위한 메인 비주얼 가이드라인 고도화 및 하위 페이지 레이아웃 변형 작업 승인 지연", status: "issue", date: "10.22" },
     { id: "i2", title: "2026년 상반기 글로벌 프로모션 캠페인을 위한 인터랙티브 모션 그래픽 소스 제작 납기 지연 및 협력사 조율 필요", status: "issue", date: "10.24" },
     { id: "i3", title: "경영기획팀 피드백 미수신", status: "issue", date: "10.25" },
-    { id: "i4", title: "외주 일러스트레이터 납기 지연", status: "issue", date: "10.26" },
-    { id: "i5", title: "다크모드 접근성 기준 불명확", status: "progress", date: "10.23" },
+    { id: "i4", title: "외주 일러스트레이터 납기 지연", status: "done", date: "10.26" },
+    { id: "i5", title: "다크모드 접근성 기준 불명확", status: "issue", date: "10.23" },
     { id: "i6", title: "구형 브라우저 호환성 문제 발생", status: "issue", date: "10.27" },
-    { id: "i7", title: "디자인 QA 환경 서버 불안정", status: "ongoing", date: "10.28" },
-    { id: "i8", title: "최종 산출물 포맷 합의 필요", status: "progress", date: "10.29" },
+    { id: "i7", title: "디자인 QA 환경 서버 불안정", status: "done", date: "10.28" },
+    { id: "i8", title: "최종 산출물 포맷 합의 필요", status: "issue", date: "10.29" },
     { id: "i9", title: "일부 아이콘 저작권 재검토", status: "issue", date: "10.30" },
     { id: "i10", title: "협업툴 권한 설정 오류", status: "done", date: "10.20" },
   ]
