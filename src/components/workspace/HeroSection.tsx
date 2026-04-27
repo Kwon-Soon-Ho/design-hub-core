@@ -14,7 +14,14 @@ export function HeroSection() {
   const [thumbnails, setThumbnails] = useState<Project[]>(initialThumbnails);
   const [activeDraftCover, setActiveDraftCover] = useState(initialFeatured.cover);
   const [segmentTab, setSegmentTab] = useState<"tasks" | "issues">("tasks");
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  // Drag-to-scroll state (Task 4)
   const scrollRef = useRef<HTMLDivElement>(null);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+  const dragged = useRef(false);
 
   useEffect(() => {
     setActiveDraftCover(activeProject.cover);
@@ -27,7 +34,45 @@ export function HeroSection() {
     }
   };
 
+  // Task 5: Scroll progress bar update
+  const handleScroll = () => {
+    if (!scrollRef.current) return;
+    const { scrollLeft: sl, scrollWidth, clientWidth } = scrollRef.current;
+    const max = scrollWidth - clientWidth;
+    setScrollProgress(max > 0 ? (sl / max) * 100 : 0);
+  };
+
+  // Task 4: Drag-to-scroll handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!scrollRef.current) return;
+    isDragging.current = true;
+    dragged.current = false;
+    startX.current = e.pageX - scrollRef.current.offsetLeft;
+    scrollLeft.current = scrollRef.current.scrollLeft;
+  };
+
+  const handleMouseLeave = () => {
+    isDragging.current = false;
+  };
+
+  const handleMouseUp = () => {
+    isDragging.current = false;
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging.current || !scrollRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = x - startX.current;
+    if (Math.abs(walk) > 5) {
+      dragged.current = true;
+    }
+    scrollRef.current.scrollLeft = scrollLeft.current - walk;
+  };
+
   const handleThumbnailClick = (clickedProject: Project, index: number) => {
+    // Task 4: Ghost-click prevention
+    if (dragged.current) return;
     const newThumbnails = [...thumbnails];
     newThumbnails[index] = activeProject;
     setActiveProject(clickedProject);
@@ -37,15 +82,15 @@ export function HeroSection() {
 
   const draftImages = [
     activeProject.cover,
-    "https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1579546929518-9e396f3cc135?auto=format&fit=crop&w=800&q=80"
+    "https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=1600&h=900&q=80",
+    "https://images.unsplash.com/photo-1579546929518-9e396f3cc135?auto=format&fit=crop&w=1600&h=900&q=80"
   ];
-  
+
   const leftOffsets = ["left-0 group-hover/drafts:left-0", "left-0 group-hover/drafts:left-[26px]", "left-0 group-hover/drafts:left-[52px]"];
 
   const listItems = segmentTab === "tasks" ? activeProject.tasks : activeProject.issues;
   const sortedItems = listItems ? [...listItems].sort((a, b) => a.date.localeCompare(b.date)) : [];
-  
+
   // Filter out PM from assignees
   const filteredAssignees = activeProject.assignees?.filter(member => member.name !== activeProject.owner) || [];
 
@@ -58,14 +103,14 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* Task 1: REMOVED overflow-hidden from motion.article to allow glow to cast freely */}
-      <motion.article 
-        layout 
+      <motion.article
+        layout
         className="group relative rounded-[32px] bg-surface shadow-soft-md border border-hairline/40"
       >
         <div className="grid md:grid-cols-[1.4fr_1fr] rounded-[32px] overflow-hidden">
-          {/* Task 3: Force strict aspect-video — removed md:aspect-auto md:h-full */}
-          <div className="relative aspect-video bg-neutral-100/80 dark:bg-neutral-900/50 p-4 flex items-center justify-center shadow-inner">
+
+          {/* Task 1: Direct floating hero image — no inner background/shadow/border */}
+          <div className="relative aspect-video flex items-center justify-center p-6 md:p-10 z-10">
             <AnimatePresence mode="popLayout">
               <motion.img
                 key={`fg-${activeDraftCover}`}
@@ -76,10 +121,10 @@ export function HeroSection() {
                 src={activeDraftCover}
                 alt={activeProject.title}
                 loading="eager"
-                className="relative z-10 w-full h-full object-contain shadow-xl drop-shadow-lg rounded-xl ring-1 ring-black/5 hover:drop-shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] hover:brightness-105 transition-all duration-500"
+                className="w-full h-full rounded-2xl object-contain shadow-[0_30px_60px_-15px_rgba(0,0,0,0.25)] hover:shadow-[0_40px_80px_-10px_rgba(0,0,0,0.38)] transition-shadow duration-500"
               />
             </AnimatePresence>
-            
+
             <div className="absolute left-6 top-6 flex items-center gap-2 z-20">
               <span className={`inline-flex items-center rounded-full px-3.5 py-1.5 text-[12px] font-bold shadow-sm backdrop-blur-md ${cellChipClass[activeProject.cell]}`}>
                 {cellLabel[activeProject.cell]}
@@ -109,13 +154,13 @@ export function HeroSection() {
             </div>
           </div>
 
+          {/* Task 2: Strict Flexbox layout — no absolute button */}
           <div className="flex flex-col p-7 md:p-8 gap-5 relative z-20 bg-surface">
             <div>
               <motion.h3 layout className="text-2xl md:text-[26px] font-bold tracking-tight leading-snug text-foreground line-clamp-2 mb-3">
                 {activeProject.title}
               </motion.h3>
 
-              {/* Task 2: Progress Bar Vertical Infographic */}
               <motion.div layout className="mb-5 flex flex-col gap-2">
                 <span className="text-sm font-bold text-muted-foreground uppercase">진행률</span>
                 <div className="flex items-center gap-4">
@@ -131,7 +176,6 @@ export function HeroSection() {
                 </div>
               </motion.div>
 
-              {/* Metadata row */}
               <motion.div layout className="flex flex-wrap items-center gap-2 mt-4">
                 <span className="inline-flex items-center rounded-full bg-surface px-3 py-1 text-[11px] font-bold text-foreground border border-hairline/60 shadow-sm">
                   PM: {activeProject.owner}
@@ -156,9 +200,9 @@ export function HeroSection() {
               </div>
             </motion.div>
 
-            {/* Segment Tab View */}
-            <motion.div layout className="flex-1 min-h-0 flex flex-col bg-background/50 border border-border/40 rounded-[20px] p-5 pb-16 shadow-sm relative">
-              <div className="flex items-center gap-1 bg-muted/50 p-1 rounded-lg mb-4 w-fit">
+            {/* Task 2: Strict Flexbox segment panel — list stretches, button is anchored at bottom */}
+            <motion.div layout className="flex-1 min-h-0 flex flex-col bg-background/50 border border-border/40 rounded-[20px] p-5 shadow-sm">
+              <div className="flex items-center gap-1 bg-muted/50 p-1 rounded-lg mb-4 w-fit shrink-0">
                 <button
                   onClick={() => setSegmentTab("tasks")}
                   className={`px-4 py-1.5 text-[12px] font-bold rounded-md transition-all ${
@@ -176,11 +220,12 @@ export function HeroSection() {
                   이슈 사항
                 </button>
               </div>
-              
-              <div className="overflow-y-auto max-h-[160px] custom-scrollbar pr-2 flex-1 relative z-10">
+
+              {/* Task 2: flex-1 min-h-[240px] — strictly stops above button */}
+              <div className="overflow-y-auto flex-1 min-h-[240px] custom-scrollbar pr-2">
                 <AnimatePresence mode="popLayout">
                   {sortedItems.map((item) => (
-                    <motion.div 
+                    <motion.div
                       key={item.id}
                       initial={{ opacity: 0, y: 5 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -201,20 +246,22 @@ export function HeroSection() {
                   ))}
                 </AnimatePresence>
                 {sortedItems.length === 0 && (
-                   <p className="text-[13px] text-muted-foreground leading-relaxed py-4 text-center">등록된 항목이 없습니다.</p>
+                  <p className="text-[13px] text-muted-foreground leading-relaxed py-4 text-center">등록된 항목이 없습니다.</p>
                 )}
               </div>
 
-              {/* Floating Button */}
-              <button className="absolute bottom-5 right-5 inline-flex items-center gap-1.5 rounded-[12px] bg-foreground px-5 py-2.5 text-[13px] font-bold text-background hover:scale-105 transition-all shadow-md active:scale-95 z-20">
-                프로젝트 상세 보기 <ArrowUpRight className="h-4 w-4" />
-              </button>
+              {/* Task 2: Button strictly at bottom via shrink-0 + mt-auto */}
+              <div className="shrink-0 pt-4 mt-auto flex justify-end z-20">
+                <button className="inline-flex items-center gap-1.5 rounded-[12px] bg-foreground px-5 py-2.5 text-[13px] font-bold text-background hover:scale-105 transition-all shadow-md active:scale-95">
+                  프로젝트 상세 보기 <ArrowUpRight className="h-4 w-4" />
+                </button>
+              </div>
             </motion.div>
           </div>
         </div>
       </motion.article>
 
-      {/* Micro thumbnails slider — Task 4: Split Card with Blur Matte */}
+      {/* Thumbnail slider — Task 4: Drag-to-scroll + ghost-click prevention */}
       <div className="relative group/slider mt-2">
         <button onClick={() => scroll("left")} className="absolute -left-5 top-1/2 -translate-y-1/2 z-[60] grid h-12 w-12 place-items-center rounded-full bg-background/80 backdrop-blur-xl border border-hairline/60 text-foreground shadow-xl opacity-0 group-hover/slider:opacity-100 transition-all duration-300 hover:scale-110 hover:bg-background">
           <ChevronLeft className="h-6 w-6" />
@@ -222,8 +269,16 @@ export function HeroSection() {
         <button onClick={() => scroll("right")} className="absolute -right-5 top-1/2 -translate-y-1/2 z-[60] grid h-12 w-12 place-items-center rounded-full bg-background/80 backdrop-blur-xl border border-hairline/60 text-foreground shadow-xl opacity-0 group-hover/slider:opacity-100 transition-all duration-300 hover:scale-110 hover:bg-background">
           <ChevronRight className="h-6 w-6" />
         </button>
-        
-        <div ref={scrollRef} className="no-scrollbar flex gap-4 overflow-x-auto py-4 -my-4 px-1 snap-x snap-mandatory scroll-smooth relative z-40">
+
+        <div
+          ref={scrollRef}
+          onScroll={handleScroll}
+          onMouseDown={handleMouseDown}
+          onMouseLeave={handleMouseLeave}
+          onMouseUp={handleMouseUp}
+          onMouseMove={handleMouseMove}
+          className="no-scrollbar flex gap-4 overflow-x-auto py-4 -my-4 px-1 snap-x snap-mandatory scroll-smooth relative z-40 cursor-grab active:cursor-grabbing select-none"
+        >
           <AnimatePresence mode="popLayout">
             {thumbnails.map((p, index) => (
               <motion.article
@@ -234,7 +289,6 @@ export function HeroSection() {
               >
                 {/* Top Half — Blur Matte technique */}
                 <div className="aspect-video relative overflow-hidden rounded-t-xl">
-                  {/* Background Matte (blurred fill) */}
                   <img
                     src={p.cover}
                     alt=""
@@ -242,7 +296,6 @@ export function HeroSection() {
                     loading="lazy"
                     className="absolute inset-0 w-full h-full object-cover blur-xl opacity-40 scale-110 z-0 pointer-events-none"
                   />
-                  {/* Foreground (true ratio) */}
                   <img
                     src={p.cover}
                     alt={p.title}
@@ -270,6 +323,14 @@ export function HeroSection() {
               </motion.article>
             ))}
           </AnimatePresence>
+        </div>
+
+        {/* Task 5: Scroll progress bar */}
+        <div className="h-1 w-full bg-border/50 rounded-full overflow-hidden mt-4">
+          <div
+            className="h-full bg-foreground transition-all duration-75 ease-out rounded-full"
+            style={{ width: `${scrollProgress}%` }}
+          />
         </div>
       </div>
     </section>
