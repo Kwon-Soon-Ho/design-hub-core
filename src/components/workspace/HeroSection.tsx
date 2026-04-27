@@ -108,36 +108,41 @@ export function HeroSection() {
       >
         <div className="grid h-auto md:h-[780px] md:grid-cols-[1.4fr_1fr] rounded-[32px] overflow-hidden">
 
-          {/* Hero image — overflow-hidden traps shadow inside rounded corners; both images are absolute so they never dictate height */}
-          <div className="relative overflow-hidden flex items-center justify-center bg-surface h-full">
-            {/* Background blur matte — absolute, fills container */}
-            <img
-              src={activeDraftCover}
-              alt=""
-              aria-hidden="true"
-              draggable={false}
-              className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-30 scale-110 pointer-events-none z-0"
-            />
+          {/* Task 1: Left canvas — curved right edge creates floating split; overflow-hidden kept for blur matte */}
+          <div className="relative flex items-center justify-center bg-surface h-full md:rounded-r-[2.5rem] z-20 shadow-[10px_0_30px_-15px_rgba(0,0,0,0.15)] overflow-hidden">
 
-            {/* Task 2: Foreground — absolute inset-0 so it NEVER drives container height */}
-            <AnimatePresence mode="popLayout">
-              <motion.img
-                key={`fg-${activeDraftCover}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.4 }}
-                whileHover={{ filter: "drop-shadow(0 28px 56px rgba(0,0,0,0.42)) brightness(1.05)" }}
+            {/* Task 2: 1. Background Blur Matte — absolute div traps the blur */}
+            <div className="absolute inset-0 z-0">
+              <img
                 src={activeDraftCover}
-                alt={activeProject.title}
-                loading="eager"
+                alt=""
+                aria-hidden="true"
                 draggable={false}
-                className="absolute inset-0 w-full h-full object-contain rounded-2xl p-6 z-10 drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-[filter] duration-500"
+                className="w-full h-full object-cover blur-3xl opacity-30 scale-110 pointer-events-none"
               />
-            </AnimatePresence>
+            </div>
+
+            {/* Task 2: 2. Foreground Image Wrapper (Flex — lets rounded-2xl clip actual image pixels) */}
+            <div className="relative z-10 w-full h-full flex items-center justify-center p-8">
+              <AnimatePresence mode="popLayout">
+                <motion.img
+                  key={`fg-${activeDraftCover}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.4 }}
+                  whileHover={{ filter: "drop-shadow(0 28px 56px rgba(0,0,0,0.42)) brightness(1.05)" }}
+                  src={activeDraftCover}
+                  alt={activeProject.title}
+                  loading="eager"
+                  draggable={false}
+                  className="max-w-full max-h-full object-contain rounded-2xl drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-[filter] duration-500"
+                />
+              </AnimatePresence>
+            </div>
 
             {/* Chips overlay */}
-            <div className="absolute left-6 top-6 flex items-center gap-2 z-20">
+            <div className="absolute left-6 top-6 flex items-center gap-2 z-30">
               <span className={`inline-flex items-center rounded-full px-3.5 py-1.5 text-[12px] font-bold shadow-sm backdrop-blur-md ${cellChipClass[activeProject.cell]}`}>
                 {cellLabel[activeProject.cell]}
               </span>
@@ -148,7 +153,7 @@ export function HeroSection() {
             </div>
 
             {/* Draft thumbnails overlay */}
-            <div className="absolute right-6 bottom-6 z-20 group/drafts flex items-center bg-background/60 backdrop-blur-md rounded-full px-2 py-1.5 border border-white/10 shadow-lg cursor-pointer hover:bg-background/80 transition-colors">
+            <div className="absolute right-6 bottom-6 z-30 group/drafts flex items-center bg-background/60 backdrop-blur-md rounded-full px-2 py-1.5 border border-white/10 shadow-lg cursor-pointer hover:bg-background/80 transition-colors">
               <div className="flex relative w-8 h-8 group-hover/drafts:w-[84px] transition-all duration-300 ease-out">
                 {draftImages.map((src, i) => (
                   <img
