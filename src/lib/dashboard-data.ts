@@ -79,7 +79,7 @@ export const featured: Project = {
   progress: 62,
   dDay: 14,
   owner: "강미나",
-  cover: img16x9("photo-1561070791-2526d30994b5"),
+  cover: img16x9("photo-1561070791-2526d30994b5"), // ID5
   updatedAt: "2시간 전 업데이트",
   assignees: [
     { name: "강미나" },
@@ -116,35 +116,35 @@ export const featured: Project = {
   ]
 };
 
-// Diverse ratios for stress-testing Blur Matte (1:1, 9:16, 21:9, 16:9)
+// Diverse ratios — all IDs from verified bulletproof pool
 export const microThumbnails: Project[] = [
   { id: "m-1",  title: "브랜드 리뉴얼",             description: "업무 내용입니다.", cell: "ux",    status: "progress", priority: "high", progress: 62,  dDay: 14, owner: "강미나", cover: img16x9("photo-1561070791-2526d30994b5"),  updatedAt: "2시간 전",  tasks: [], issues: [] },
-  { id: "m-2",  title: "신제품 런칭 영상",           description: "내용.",           cell: "video", status: "progress", priority: "high", progress: 41,  dDay: 7,  owner: "김철수", cover: img1x1("photo-1536240478700-b869ad10e097"),  updatedAt: "5시간 전",  tasks: [], issues: [] },
-  { id: "m-3",  title: "모바일 앱 온보딩 개선",      description: "내용.",           cell: "ux",    status: "issue",    priority: "mid",  progress: 28,  dDay: 3,  owner: "이영희", cover: img9x16("photo-1551288049-bebda4e38f71"),  updatedAt: "어제",       tasks: [], issues: [] },
-  { id: "m-4",  title: "패키지 디자인",              description: "내용.",           cell: "edit",  status: "ongoing",  priority: "mid",  progress: 75,  dDay: 21, owner: "박지훈", cover: img21x9("photo-1558618666-fcd25c85cd64"),  updatedAt: "1일 전",    tasks: [], issues: [] },
-  { id: "m-5",  title: "캠페인 키비주얼",            description: "내용.",           cell: "edit",  status: "issue",    priority: "high", progress: 18,  dDay: 2,  owner: "최수정", cover: img16x9("photo-1542744094-3a31f272c490"),  updatedAt: "방금 전",   tasks: [], issues: [] },
-  { id: "m-6",  title: "사내 워크샵 영상",           description: "내용.",           cell: "video", status: "done",     priority: "low",  progress: 100, dDay: 30, owner: "정유진", cover: img1x1("photo-1516321318423-f06f85e504b3"),  updatedAt: "3일 전",    tasks: [], issues: [] },
-  { id: "m-7",  title: "디자인 시스템 토큰 정비",    description: "내용.",           cell: "ux",    status: "ongoing",  priority: "mid",  progress: 54,  dDay: 11, owner: "강미나", cover: img9x16("photo-1634942537034-2531766767d1"),  updatedAt: "오늘",       tasks: [], issues: [] },
-  { id: "m-8",  title: "가을 프로모션 배너",          description: "내용.",           cell: "edit",  status: "progress", priority: "high", progress: 85,  dDay: 1,  owner: "이영희", cover: img21x9("photo-1507003211169-0a1dd7228f2d"),  updatedAt: "4시간 전",  tasks: [], issues: [] },
-  { id: "m-9",  title: "웹사이트 메인 개편",         description: "내용.",           cell: "ux",    status: "progress", priority: "high", progress: 12,  dDay: 45, owner: "강미나", cover: img16x9("photo-1467232004584-a241de8bcf5d"),  updatedAt: "1시간 전",  tasks: [], issues: [] },
-  { id: "m-10", title: "유튜브 인트로/아웃트로",      description: "내용.",           cell: "video", status: "issue",    priority: "mid",  progress: 40,  dDay: 5,  owner: "김철수", cover: img1x1("photo-1611532736597-de2d4265fba3"),  updatedAt: "어제",       tasks: [], issues: [] },
-  { id: "m-11", title: "SNS 콘텐츠 패키지",          description: "내용.",           cell: "edit",  status: "progress", priority: "mid",  progress: 33,  dDay: 9,  owner: "최수정", cover: img9x16("photo-1504868584819-f8e8b4b6d7e3"),  updatedAt: "2일 전",    tasks: [], issues: [] },
+  { id: "m-2",  title: "신제품 런칭 영상",           description: "내용.",           cell: "video", status: "progress", priority: "high", progress: 41,  dDay: 7,  owner: "김철수", cover: img1x1("photo-1486406146926-c627a92ad1ab"),  updatedAt: "5시간 전",  tasks: [], issues: [] },
+  { id: "m-3",  title: "모바일 앱 온보딩 개선",      description: "내용.",           cell: "ux",    status: "issue",    priority: "mid",  progress: 28,  dDay: 3,  owner: "이영희", cover: img9x16("photo-1486406146926-c627a92ad1ab"), updatedAt: "어제",       tasks: [], issues: [] },
+  { id: "m-4",  title: "패키지 디자인",              description: "내용.",           cell: "edit",  status: "ongoing",  priority: "mid",  progress: 75,  dDay: 21, owner: "박지훈", cover: img21x9("photo-1522071820081-009f0129c71c"),  updatedAt: "1일 전",    tasks: [], issues: [] },
+  { id: "m-5",  title: "캠페인 키비주얼",            description: "내용.",           cell: "edit",  status: "issue",    priority: "high", progress: 18,  dDay: 2,  owner: "최수정", cover: img16x9("photo-1542744173-8e7e53415bb0"),  updatedAt: "방금 전",   tasks: [], issues: [] },
+  { id: "m-6",  title: "사내 워크샵 영상",           description: "내용.",           cell: "video", status: "done",     priority: "low",  progress: 100, dDay: 30, owner: "정유진", cover: img1x1("photo-1512314889357-e157c22f938d"),  updatedAt: "3일 전",    tasks: [], issues: [] },
+  { id: "m-7",  title: "디자인 시스템 토큰 정비",    description: "내용.",           cell: "ux",    status: "ongoing",  priority: "mid",  progress: 54,  dDay: 11, owner: "강미나", cover: img9x16("photo-1558655146-d09347e92766"),  updatedAt: "오늘",       tasks: [], issues: [] },
+  { id: "m-8",  title: "가을 프로모션 배너",          description: "내용.",           cell: "edit",  status: "progress", priority: "high", progress: 85,  dDay: 1,  owner: "이영희", cover: img21x9("photo-1618005182384-a83a8bd57fbe"),  updatedAt: "4시간 전",  tasks: [], issues: [] },
+  { id: "m-9",  title: "웹사이트 메인 개편",         description: "내용.",           cell: "ux",    status: "progress", priority: "high", progress: 12,  dDay: 45, owner: "강미나", cover: img16x9("photo-1507238691740-187a5b1d37b8"),  updatedAt: "1시간 전",  tasks: [], issues: [] },
+  { id: "m-10", title: "유튜브 인트로/아웃트로",      description: "내용.",           cell: "video", status: "issue",    priority: "mid",  progress: 40,  dDay: 5,  owner: "김철수", cover: img1x1("photo-1600132806370-bf17e65e942f"),  updatedAt: "어제",       tasks: [], issues: [] },
+  { id: "m-11", title: "SNS 콘텐츠 패키지",          description: "내용.",           cell: "edit",  status: "progress", priority: "mid",  progress: 33,  dDay: 9,  owner: "최수정", cover: img9x16("photo-1551288049-bebda4e38f71"),  updatedAt: "2일 전",    tasks: [], issues: [] },
   { id: "m-12", title: "연간 리포트 디자인",          description: "내용.",           cell: "edit",  status: "ongoing",  priority: "low",  progress: 60,  dDay: 60, owner: "박지훈", cover: img21x9("photo-1497366216548-37526070297c"),  updatedAt: "오늘",       tasks: [], issues: [] },
 ];
 
-// Scale to 12+ items for filter richness
+// Scale to 12+ items for filter richness — all IDs from verified bulletproof pool
 export const activeProjects: Project[] = [
   { id: "a-1",  title: "브랜드 리뉴얼",              description: "업무 내용입니다.", cell: "ux",    status: "progress", priority: "high", progress: 62,  dDay: 14, owner: "강미나", cover: img16x9("photo-1561070791-2526d30994b5"),  updatedAt: "2시간 전" },
-  { id: "a-2",  title: "신제품 런칭 영상",            description: "내용.",           cell: "video", status: "progress", priority: "high", progress: 41,  dDay: 7,  owner: "김철수", cover: img16x9("photo-1536240478700-b869ad10e097"),  updatedAt: "5시간 전" },
-  { id: "a-3",  title: "모바일 앱 온보딩 개선",       description: "내용.",           cell: "ux",    status: "issue",    priority: "mid",  progress: 28,  dDay: 3,  owner: "이영희", cover: img16x9("photo-1551288049-bebda4e38f71"),  updatedAt: "어제" },
-  { id: "a-4",  title: "패키지 디자인",               description: "내용.",           cell: "edit",  status: "ongoing",  priority: "mid",  progress: 75,  dDay: 21, owner: "박지훈", cover: img16x9("photo-1558618666-fcd25c85cd64"),  updatedAt: "1일 전" },
-  { id: "a-5",  title: "캠페인 키비주얼",             description: "내용.",           cell: "edit",  status: "issue",    priority: "high", progress: 18,  dDay: 2,  owner: "최수정", cover: img16x9("photo-1542744094-3a31f272c490"),  updatedAt: "방금 전" },
-  { id: "a-6",  title: "사내 워크샵 영상",            description: "내용.",           cell: "video", status: "done",     priority: "low",  progress: 100, dDay: 30, owner: "정유진", cover: img16x9("photo-1516321318423-f06f85e504b3"),  updatedAt: "3일 전" },
-  { id: "a-7",  title: "디자인 시스템 토큰 정비",     description: "내용.",           cell: "ux",    status: "ongoing",  priority: "mid",  progress: 54,  dDay: 11, owner: "강미나", cover: img16x9("photo-1634942537034-2531766767d1"),  updatedAt: "오늘" },
-  { id: "a-8",  title: "가을 프로모션 배너",           description: "내용.",           cell: "edit",  status: "progress", priority: "high", progress: 85,  dDay: 1,  owner: "이영희", cover: img16x9("photo-1507003211169-0a1dd7228f2d"),  updatedAt: "4시간 전" },
-  { id: "a-9",  title: "웹사이트 메인 개편",           description: "내용.",           cell: "ux",    status: "progress", priority: "high", progress: 12,  dDay: 45, owner: "강미나", cover: img16x9("photo-1467232004584-a241de8bcf5d"),  updatedAt: "1시간 전" },
-  { id: "a-10", title: "유튜브 채널 아트 리뉴얼",      description: "내용.",           cell: "video", status: "progress", priority: "mid",  progress: 40,  dDay: 5,  owner: "김철수", cover: img16x9("photo-1611532736597-de2d4265fba3"),  updatedAt: "어제" },
-  { id: "a-11", title: "SNS 콘텐츠 템플릿 제작",       description: "내용.",           cell: "edit",  status: "progress", priority: "mid",  progress: 33,  dDay: 9,  owner: "최수정", cover: img16x9("photo-1504868584819-f8e8b4b6d7e3"),  updatedAt: "2일 전" },
+  { id: "a-2",  title: "신제품 런칭 영상",            description: "내용.",           cell: "video", status: "progress", priority: "high", progress: 41,  dDay: 7,  owner: "김철수", cover: img16x9("photo-1486406146926-c627a92ad1ab"),  updatedAt: "5시간 전" },
+  { id: "a-3",  title: "모바일 앱 온보딩 개선",       description: "내용.",           cell: "ux",    status: "issue",    priority: "mid",  progress: 28,  dDay: 3,  owner: "이영희", cover: img16x9("photo-1486406146926-c627a92ad1ab"),  updatedAt: "어제" },
+  { id: "a-4",  title: "패키지 디자인",               description: "내용.",           cell: "edit",  status: "ongoing",  priority: "mid",  progress: 75,  dDay: 21, owner: "박지훈", cover: img16x9("photo-1522071820081-009f0129c71c"),  updatedAt: "1일 전" },
+  { id: "a-5",  title: "캠페인 키비주얼",             description: "내용.",           cell: "edit",  status: "issue",    priority: "high", progress: 18,  dDay: 2,  owner: "최수정", cover: img16x9("photo-1542744173-8e7e53415bb0"),  updatedAt: "방금 전" },
+  { id: "a-6",  title: "사내 워크샵 영상",            description: "내용.",           cell: "video", status: "done",     priority: "low",  progress: 100, dDay: 30, owner: "정유진", cover: img16x9("photo-1512314889357-e157c22f938d"),  updatedAt: "3일 전" },
+  { id: "a-7",  title: "디자인 시스템 토큰 정비",     description: "내용.",           cell: "ux",    status: "ongoing",  priority: "mid",  progress: 54,  dDay: 11, owner: "강미나", cover: img16x9("photo-1558655146-d09347e92766"),  updatedAt: "오늘" },
+  { id: "a-8",  title: "가을 프로모션 배너",           description: "내용.",           cell: "edit",  status: "progress", priority: "high", progress: 85,  dDay: 1,  owner: "이영희", cover: img16x9("photo-1618005182384-a83a8bd57fbe"),  updatedAt: "4시간 전" },
+  { id: "a-9",  title: "웹사이트 메인 개편",           description: "내용.",           cell: "ux",    status: "progress", priority: "high", progress: 12,  dDay: 45, owner: "강미나", cover: img16x9("photo-1507238691740-187a5b1d37b8"),  updatedAt: "1시간 전" },
+  { id: "a-10", title: "유튜브 채널 아트 리뉴얼",      description: "내용.",           cell: "video", status: "progress", priority: "mid",  progress: 40,  dDay: 5,  owner: "김철수", cover: img16x9("photo-1600132806370-bf17e65e942f"),  updatedAt: "어제" },
+  { id: "a-11", title: "SNS 콘텐츠 템플릿 제작",       description: "내용.",           cell: "edit",  status: "progress", priority: "mid",  progress: 33,  dDay: 9,  owner: "최수정", cover: img16x9("photo-1551288049-bebda4e38f71"),  updatedAt: "2일 전" },
   { id: "a-12", title: "2026 연간 리포트 디자인",       description: "내용.",           cell: "edit",  status: "ongoing",  priority: "low",  progress: 60,  dDay: 60, owner: "박지훈", cover: img16x9("photo-1497366216548-37526070297c"),  updatedAt: "오늘" },
 ];
 
