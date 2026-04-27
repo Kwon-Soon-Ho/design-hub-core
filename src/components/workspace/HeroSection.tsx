@@ -106,7 +106,7 @@ export function HeroSection() {
         layout
         className="group relative rounded-[32px] bg-surface shadow-soft-md border border-hairline/40"
       >
-        <div className="grid h-auto md:h-[560px] md:grid-cols-[1.4fr_1fr] rounded-[32px] overflow-hidden">
+        <div className="grid h-auto md:h-[780px] md:grid-cols-[1.4fr_1fr] rounded-[32px] overflow-hidden">
 
           {/* Task 3: Hero image — upgraded Blur Matte */}
           <div className="relative overflow-hidden flex items-center justify-center bg-surface h-full">
@@ -133,7 +133,7 @@ export function HeroSection() {
                   alt={activeProject.title}
                   loading="eager"
                   draggable={false}
-                  className="max-w-full max-h-full object-contain rounded-2xl drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-[filter] duration-500"
+                  className="max-w-full max-h-full w-auto h-auto object-contain rounded-2xl drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-[filter] duration-500"
                 />
               </div>
             </AnimatePresence>
@@ -237,7 +237,7 @@ export function HeroSection() {
                 </button>
               </div>
 
-              <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-2">
+              <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border/60">
                 <AnimatePresence mode="popLayout">
                   {sortedItems.map((item) => (
                     <motion.div
@@ -300,7 +300,7 @@ export function HeroSection() {
                 key={p.id}
                 layout
                 onClick={() => handleThumbnailClick(p, index)}
-                className="w-[260px] shrink-0 snap-start rounded-xl border-2 border-neutral-200 dark:border-neutral-700 shadow-sm bg-card overflow-hidden hover:shadow-lg transition-all cursor-pointer flex flex-col hover:-translate-y-1 duration-300"
+                className="w-[260px] shrink-0 snap-start rounded-xl border border-neutral-400 dark:border-neutral-600 shadow-sm bg-card overflow-hidden hover:shadow-lg transition-all cursor-pointer flex flex-col hover:-translate-y-1 duration-300"
               >
                 {/* Task 2/4: Thumbnail — fixed height Blur Matte + GPU Optimization */}
                 <div className="h-[140px] relative overflow-hidden bg-surface">
