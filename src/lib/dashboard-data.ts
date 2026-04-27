@@ -16,6 +16,23 @@ export interface Issue {
   date: string;
 }
 
+export interface TeamMember {
+  id: string;
+  name: string;
+  dept: string;
+  avatar?: string;
+}
+
+export interface ProjectDetails {
+  manager: string;
+  collaborators: string[];
+  progress: number;
+  startDate: string;
+  endDate: string;
+  tasks: Task[];
+  assets: string[];
+}
+
 export interface Project {
   id: string;
   title: string;
@@ -31,6 +48,7 @@ export interface Project {
   assignees?: { name: string; avatar?: string }[];
   tasks?: Task[];
   issues?: Issue[];
+  details?: ProjectDetails;
 }
 
 export const cellLabel: Record<CellType, string> = {
@@ -134,8 +152,10 @@ export const microThumbnails: Project[] = [
 
 // Scale to 12+ items for filter richness — all IDs from verified bulletproof pool
 export const activeProjects: Project[] = [
-  { id: "a-1",  title: "브랜드 리뉴얼",              description: "업무 내용입니다.", cell: "ux",    status: "progress", priority: "high", progress: 62,  dDay: 14, owner: "강미나", cover: img16x9("photo-1561070791-2526d30994b5"),  updatedAt: "2시간 전" },
-  { id: "a-2",  title: "신제품 런칭 영상",            description: "내용.",           cell: "video", status: "progress", priority: "high", progress: 41,  dDay: 7,  owner: "김철수", cover: img16x9("photo-1486406146926-c627a92ad1ab"),  updatedAt: "5시간 전" },
+  { id: "a-1",  title: "브랜드 리뉴얼",              description: "업무 내용입니다.", cell: "ux",    status: "progress", priority: "high", progress: 62,  dDay: 14, owner: "강미나", cover: img16x9("photo-1561070791-2526d30994b5"),  updatedAt: "2시간 전",
+    details: { manager: "u1", collaborators: ["u2", "u3"], progress: 65, startDate: "2026-05-01", endDate: "2026-06-15", tasks: [], assets: [] } },
+  { id: "a-2",  title: "신제품 런칭 영상",            description: "내용.",           cell: "video", status: "progress", priority: "high", progress: 41,  dDay: 7,  owner: "김철수", cover: img16x9("photo-1486406146926-c627a92ad1ab"),  updatedAt: "5시간 전",
+    details: { manager: "u2", collaborators: ["u1"], progress: 41, startDate: "2026-04-10", endDate: "2026-05-20", tasks: [], assets: [] } },
   { id: "a-3",  title: "모바일 앱 온보딩 개선",       description: "내용.",           cell: "ux",    status: "issue",    priority: "mid",  progress: 28,  dDay: 3,  owner: "이영희", cover: img16x9("photo-1486406146926-c627a92ad1ab"),  updatedAt: "어제" },
   { id: "a-4",  title: "패키지 디자인",               description: "내용.",           cell: "edit",  status: "ongoing",  priority: "mid",  progress: 75,  dDay: 21, owner: "박지훈", cover: img16x9("photo-1522071820081-009f0129c71c"),  updatedAt: "1일 전" },
   { id: "a-5",  title: "캠페인 키비주얼",             description: "내용.",           cell: "edit",  status: "issue",    priority: "high", progress: 18,  dDay: 2,  owner: "최수정", cover: img16x9("photo-1542744173-8e7e53415bb0"),  updatedAt: "방금 전" },
@@ -146,6 +166,12 @@ export const activeProjects: Project[] = [
   { id: "a-10", title: "유튜브 채널 아트 리뉴얼",      description: "내용.",           cell: "video", status: "progress", priority: "mid",  progress: 40,  dDay: 5,  owner: "김철수", cover: img16x9("photo-1600132806370-bf17e65e942f"),  updatedAt: "어제" },
   { id: "a-11", title: "SNS 콘텐츠 템플릿 제작",       description: "내용.",           cell: "edit",  status: "progress", priority: "mid",  progress: 33,  dDay: 9,  owner: "최수정", cover: img16x9("photo-1551288049-bebda4e38f71"),  updatedAt: "2일 전" },
   { id: "a-12", title: "2026 연간 리포트 디자인",       description: "내용.",           cell: "edit",  status: "ongoing",  priority: "low",  progress: 60,  dDay: 60, owner: "박지훈", cover: img16x9("photo-1497366216548-37526070297c"),  updatedAt: "오늘" },
+];
+
+export const teamMembers: TeamMember[] = [
+  { id: "u1", name: "김디자인", dept: "UX팀" },
+  { id: "u2", name: "박기획", dept: "기획팀" },
+  { id: "u3", name: "이개발", dept: "개발팀" },
 ];
 
 export const summary = {

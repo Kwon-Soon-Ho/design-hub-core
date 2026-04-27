@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { ArrowUpRight, Clock, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { type CellType, cellLabel, statusLabel, featured as initialFeatured, microThumbnails as initialThumbnails, Project } from "@/lib/dashboard-data";
+import { ProjectDetailDrawer } from "@/components/workspace/ProjectDetailDrawer";
 
 const cellChipClass: Record<CellType, string> = {
   video: "bg-cell-video-soft text-cell-video",
@@ -14,8 +15,8 @@ export function HeroSection() {
   const [thumbnails, setThumbnails] = useState<Project[]>(initialThumbnails);
   const [activeDraftCover, setActiveDraftCover] = useState(initialFeatured.cover);
   const [segmentTab, setSegmentTab] = useState<"tasks" | "issues">("tasks");
-  // Task 4: scrollProgress ranges 0–400 for thumb translateX
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   // Drag-to-scroll state
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -103,7 +104,8 @@ export function HeroSection() {
   const filteredAssignees = activeProject.assignees?.filter(member => member.name !== activeProject.owner) || [];
 
   return (
-    <section className="space-y-6">
+    <>
+      <section className="space-y-6">
       <div className="flex items-end justify-between gap-4">
         <div>
           <h2 className="text-lg font-bold tracking-tight text-foreground">최근 업데이트</h2>
@@ -297,7 +299,10 @@ export function HeroSection() {
 
               {/* Task 4: shrink-0 strictly protects button from being pushed off-screen */}
               <div className="shrink-0 pt-4 mt-auto flex justify-end z-20">
-                <button className="inline-flex items-center gap-1.5 rounded-[12px] bg-foreground px-5 py-2.5 text-[13px] font-bold text-background hover:scale-105 transition-all shadow-md active:scale-95">
+                <button
+                  onClick={() => setIsDrawerOpen(true)}
+                  className="inline-flex items-center gap-1.5 rounded-[12px] bg-foreground px-5 py-2.5 text-[13px] font-bold text-background hover:scale-105 transition-all shadow-md active:scale-95"
+                >
                   프로젝트 상세 보기 <ArrowUpRight className="h-4 w-4" />
                 </button>
               </div>
@@ -383,5 +388,14 @@ export function HeroSection() {
         </div>
       </div>
     </section>
+
+    {isDrawerOpen && (
+      <ProjectDetailDrawer
+        isOpen={isDrawerOpen}
+        onClose={setIsDrawerOpen}
+        project={activeProject}
+      />
+    )}
+    </>
   );
 }
